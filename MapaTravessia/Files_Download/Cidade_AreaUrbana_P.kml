@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="Cidade_AreaUrbana_P" id="Cidade_AreaUrbana_P">
+	<SimpleField name="ID_OBJETO" type="float"></SimpleField>
+	<SimpleField name="NOME" type="string"></SimpleField>
+	<SimpleField name="NOMEABREV" type="string"></SimpleField>
+	<SimpleField name="GEOMETRIAA" type="string"></SimpleField>
+</Schema>
+<Folder><name>Cidade_AreaUrbana_P</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Cidade_AreaUrbana_P">
+		<SimpleData name="ID_OBJETO">59853</SimpleData>
+		<SimpleData name="NOME">Dom Joaquim</SimpleData>
+		<SimpleData name="NOMEABREV">Dom Joaquim</SimpleData>
+		<SimpleData name="GEOMETRIAA">Não</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><altitudeMode>clampToGround</altitudeMode><coordinates>-43.2560013,-18.9669999449999,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Cidade_AreaUrbana_P">
+		<SimpleData name="ID_OBJETO">60088</SimpleData>
+		<SimpleData name="NOME">Alvorada de Minas</SimpleData>
+		<SimpleData name="NOMEABREV">Alvorada de Minas</SimpleData>
+		<SimpleData name="GEOMETRIAA">Não</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><altitudeMode>clampToGround</altitudeMode><coordinates>-43.3659564559999,-18.733241581,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Cidade_AreaUrbana_P">
+		<SimpleData name="ID_OBJETO">60787</SimpleData>
+		<SimpleData name="NOME">Conceição do Mato Dentro</SimpleData>
+		<SimpleData name="NOMEABREV">Conceição do Mato Dentro</SimpleData>
+		<SimpleData name="GEOMETRIAA">Não</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><altitudeMode>clampToGround</altitudeMode><coordinates>-43.4250011549999,-19.036999948,0</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

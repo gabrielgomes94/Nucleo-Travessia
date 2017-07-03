@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--- 
+		* Author: Matheus Siqueira Barros
+		* E-mail: matheus.eco.2010@gmail.com
+		*
+		* Last Modified: Jul 26, 2016
+		--->
+		
+		<!--- Website Title  --->
+		<title>Mapa - Polícia Ambiental</title>
+		<meta name="viewport" content="initial-scale=1.0">
+		<meta charset="utf-8">
+		<link href="StyleSheets/main.css" rel="stylesheet" type="text/css">
+		<link href="StyleSheets/InfoWindowStyle.css" rel="stylesheet" type="text/css">
+		
+		<!---  Page Icon  --->
+		<link rel="icon" href="Icons_Images/TravessiaIcon.ico">
+
+		<!---  MetaData  --->
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="Icons_Images/Welcome_Open.jpg" />
+		<meta property="og:title" content="Mapeamento Ambiental" />
+		<meta property="og:site_title" content="Mapa Polícia Ambiental" />
+		<meta property="og:description" content="Acesse as regiões mapeadas pela Polícia Ambiental do sul de Minas Gerais"/>
+				
+		<!---  Importing files --->
+		<script src="Includes/jquery-1.12.3.min.js"></script>
+		<script src="Includes/jquery-ui.js"></script>
+		<script src="Includes/GMaps_PMA.js"></script>
+		<script src="Includes/FunctionsControl.js"></script>
+		<script src="Includes/Function_Process.js"></script>
+		<script src="Includes/ClickInfo_FusionTable.js"></script>
+		<script src="Includes/markerclusterer.js"></script>
+		
+		<script src="https://www.google.com/jsapi"></script>
+		
+	</head>
+	
+	<body>
+		
+		<!---  Empty DIV for the Map  --->
+		<div id="map"></div>
+		
+		<div id="elevation_chart" ></div>
+		
+		<div id="MSIE">
+			<p> 
+				Devido a inefiência do Internet Explorer, esse site não desempenha as
+				funções adequadas, deixando o site com diversas limitações.
+				Por favor utilize navegadores mais modernos como o 
+				Google Chrome ou o Mozilla Firefox.
+				<a target="_blank" href="https://www.google.com/chrome/browser/desktop/">Clique aqui</a> para fazer o download do Chrome.
+				<a target="_blank" href="https://www.mozilla.org/pt-BR/firefox/new/">Clique aqui</a> para fazer o download do Mozilla Firefox.
+			
+			</p> 
+		</div>
+		
+		<!---  Empty DIV To show the name of the label when the user hover over it.--->
+		<div id="RegionHover">
+			<span id='RegionHoverComment'></span><br>
+		</div>
+
+		<div id="ToolBox">
+			<span id='close' onclick='CloseDiv(this,"", 1)'>x</span>
+			<p class="DivTitle">Calcular Medidas</p> <hr>
+			<table id="ToolBoxTable">
+
+				<div id="Calculadora_Radio">
+					<input type="radio" class="radio_Calc" name="calcular" value="dist" id="RadioDist" checked />
+					<label for="RadioDist">Distância</label>
+					<input type="radio" class="radio_Calc" name="calcular" value="area" id="RadioArea" />
+					<label for="RadioArea">Área</label>
+					<input type="radio" class="radio_Calc" name="calcular" value="area" id="RadioCircle" />
+					<label for="RadioCircle">Círculo</label>
+					<input type="radio" class="radio_Calc" name="calcular" value="pnt" id="RadioPoint" />
+					<label for="RadioPoint">Ponto</label>
+				</div>
+
+				<tr>
+					<td class="ToolBoxButtonDiv">
+						<div id="Calc_Dist_DIV"  style=" margin: 3px; width:30px; height:30px; ">
+							<button type="button" id="ToolBoxButton" ></button>
+						</div>
+					</td>
+					<td class="ToolBoxTxt">  Tamanho do traçado: 
+						<input id="Distance" type="text" style="width: 165px;cursor:grab;" > 
+						<select id="UnitConversion">
+							<option value=1>m</option>
+							<option value=1000>km</option>
+						</select>
+						<br>
+						<span id='RadiusTxt' style="display: none;">Raio:</span>
+						<input id="Radius" type="text" style="display: none; width: 100px;cursor:grab;" > 
+						<span id='RadiusUnitTxt' style="display: none;">metros</span>
+						<button type="button" id="SetRadius" style="display: none;">Set</button>
+						
+						<button type="button" id="SeeElevation" onclick="displayPathElevation()" >Elev.</button>
+						<button type="button" id="CloseChart" style="display: none;">Fechar Gráfico</button>
+					
+					</td>
+				</tr>
+			</table>
+			<br>
+			<div style="text-align: left">
+				<span id='ToolBox_Note'>Para usar essa ferramenta:</span><br>
+				<span id='ToolBox_Comment'>Clique no botão VERDE para começar a desenhar o traçado.</span><br>
+			</div>
+		</div>
+		
+
+
+		<div id="ToolBox_Control"  >
+			<span id='close' onclick='CloseDiv(this,"", 1)'>x</span>
+			<p class="DivTitle">Controles</p> <hr>
+			
+			<button type="button" id="ToggleCluster" value="1" >Ver Pontos</button>
+			<br>
+			<button type="button" id="ToggleHeatMap" value="0" >HeatMap</button>
+			
+		</div>
+		
+		<!---  Add DIV Legenda --->
+		<div id="LegendBox">
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Legenda</p> <hr>
+			
+			<table id="LegendTable">
+
+			</table>
+		</div>
+		
+		
+		<div id="GraphBox">
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Gráfico</p>
+			<hr>
+			<iframe width="500" height="300" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?containerId=googft-gviz-canvas&amp;q=select+col3%2C+count()+from+14Ji0iP1orr0-P9YHFgMLtkyRjmlyCdAgGVX_xcdJ+group+by+col3+order+by+count()+asc+limit+10&amp;viz=GVIZ&amp;t=BAR&amp;uiversion=2&amp;gco_forceIFrame=true&amp;gco_hasLabelsColumn=true&amp;att=true&amp;width=500&amp;height=285"></iframe>
+		</div>
+		
+		
+		<div id="Form-overlay-back">
+		</div> 
+		<div id="FormBox">
+			<span id='close' onclick='CloseDiv(this, fadeOutID="Form-overlay-back")'>x</span>
+			<p class="DivTitle">Formulário de Ingresso de dados</p>
+			<hr>
+			<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeaChfOPCokSdK5KvRF8R9s68t3MiIwN899CWdeORbzNccXvA/viewform?embedded=true" width="800" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+		</div>
+		
+		
+		<div id="Ajuda-overlay-back">
+		</div> 
+		<div id="AjudaBox">
+			<span id='close' onclick='CloseDiv(this, fadeOutID="Ajuda-overlay-back")'>x</span>
+			<p class="DivTitle">Ajuda</p>
+			<hr>
+			<div id="AjudaBoxChild">
+				<ul class = "AjudaList">
+					<h1>
+							Vídeos para facilitar o uso do mapa.
+					</h1>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							Vídeo 1: Visão Geral do mapa.
+						</li>
+					</h2>
+					<div class="AjudaImgVideo">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/Gxe-sU2E8dY" frameborder="0" class="VideoPlay" allowfullscreen></iframe>
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							Vídeo 2: Utilizando o filtro.
+						</li>
+					</h2>
+					
+					<div class="AjudaImgVideo">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/aDIUfS-r2vc" frameborder="0" class="VideoPlay" allowfullscreen></iframe>
+					</div>
+					
+					<br>
+					<br>
+					<h1>
+						Detalhamento das funções
+					</h1>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ModosVisu.png" alt="Modos de Visualização" style="width:60px;height:27px;">
+							Modos de visualização:
+						</li>
+					</h2>
+					<h3>
+						Existem 4 modos de visualizar o mapa: Satélite com ou sem marcadores, e a versão mapa com a função de habilitar também o relevo da região.<br>
+						Estes modos podem ser alterados acessando a barra localizada do lado superior esquerdo do mapa.<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_ModosVisualizar.png" alt="Modos de Visualização" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgFiltro.png" alt="Modos de Visualização" style="width:30px;height:30px;">
+							Filtro:
+						</li>
+					</h2>
+					<h3>
+						Para filtrar as regiões de acordo com os atributos levantados pela Polícia Ambiental, 
+						clique no segundo botão (de cima para baixo) na barra de ferramentas
+						localizada no lado superior direito do mapa. <br>
+						<u>
+						Obs: É importante ressaltar que o filtro só é aplicado para as regiões do mapa (polígonos), ou seja, não filtra os marcadores.<br>
+						</u>
+						
+						
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Filtro.png" alt="Filtro" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgLocalizar.png" alt="Localizador" style="width:30px;height:30px;">
+							Localizador:
+						</li>
+					</h2>
+					<h3>
+						Para encontrar qualquer região (dentro do levantamento feito pela Polícia Ambiental) 
+						basta utilizar o localizador. Este é o terceiro botão (de baixo para cima) da barra ferramentas  
+						(canto superior direito do mapa).<br>
+						Se a região for fora da área de estudo, apenas desmarque a caixa de seleção <i>"Comunidades em estudo"</i> e digite o local desejado.<br>
+						Opções de entrada: Nomes de cidades, estados, países, pontos turísticos, coordenadas geográficas, etc...<br>
+						
+				
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Localizador.png" alt="Localizador" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgLegenda.png" alt="Legenda" style="width:30px;height:30px;">
+							Legenda:
+						</li>
+					</h2>
+					<h3>
+							A legenda é o quarto botão (de cima para baixo) da barra de ferramentas (canto superior direito do mapa). <br>
+							Ela descreve as informações de cada componente presente no mapa.<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Legenda.png" alt="Legenda" style="width:60%;height:auto;">
+					</div>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgTools.png" alt="Distância" style="width:30px;height:30px;">
+							Calculadora de Medidas:
+						</li>
+					</h2>
+					<h3>
+							Para calcular distâncias no mapa clique no quinto botão (de cima para baixo) da barra de ferramentas (canto superior direito do mapa).<br>
+							Para começar, basta clicar no botão verde, que dará início ao modo de Calcular Medidas.<br>
+					</h3>
+					<h3>
+							Pode-se calcular Áreas ou Distâncias, apenas selecionando a opção desejada.<br>
+							Pode-se também, selecionar qual o tipo de unidade que deseja calcular:
+								<li style= "margin-left: 30px; list-style-type:circle;">
+									Metros e Quilômetros para distâncias;
+								</li>
+								<li style= "margin-left: 30px; list-style-type:circle;">
+									Metros quadrados, Quilômetros quadrados e Hectares para áreas.
+								</li>
+
+						<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Opcoes.png" alt="Opções" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							Clicando no mapa, um traçado começa a ser criado. <br>
+							Os círculos brancos criados no traçado, são denominados vértices que podem ser editados a qualquer momento dentro do modo de edição.<br>
+							
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_EditInic.png" alt="Inicio Edição" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							Ao editar um vértice a calculadora automaticamente atualiza a medida do traçado.<br>
+							Além disso, uma seta aparece no vértice para caso queira voltar ao ponto que este estava anteriormente.  <br>
+							
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_EditFim.png" alt="Fim Edição" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							A seguir um exemplo do cálculo de Área.<br>
+			
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_CalcTamMina.png" alt="Tamanho da Sede" style="width:60%;height:auto;">
+					</div>
+					<br>
+						Obs: Para clicar em alguma região ou marcador e aparecer as informações sobre esta, a opção de calcular medidas deve estar desativada (botão aparece em verde).
+					<hr>
+
+				
+				</ul>
+			</div>
+			
+		</div>
+		
+		<div id="FiltroBox" >
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Pesquisa</p>
+			<div class='FiltroContainer'>
+				<div id="FiltroFirstDIV">
+					<button type="button" id="ButtonFiltro" style="width:120px;height:45px;font-size: 15px;">Filtrar Elementos</button>
+				</div>
+				<div id="FiltroSecondDIV">
+					<button type="button" id="ButtonLimparFiltro" style="width:60px;height:40px;font-size: 10px;" onclick="CleanCheckBoxesFiltro()">Limpar Filtro</button>
+				</div>
+				<div id="FiltroThirdDIV">
+					<label>
+						<button type="button" id="CheckboxMaxMin" value='0' style="width:60px;height:40px;font-size: 10px;"  >Abrir Tópicos</button>
+					</label>				
+				</div>
+				<div class="clear">
+				</div>
+			</div>
+
+			<br>
+			<div>
+				<span id="FiltroComment"></span>
+			</div>
+			<hr>
+
+			<div id="FilterDiv">
+
+				
+			</div><!--- End FilterDiv --->
+			<div class="fadeout"></div><!--- Create a fade effect in the botton of a DIV--->
+		</div><!--- End FiltroElem --->
+		
+
+		<!---  Add DIV Localizador --->
+		<div id="Container_Center_Top">
+		<div id="LocalizadorBox" >
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Procure um local</p>
+			<input id="address" type="textbox"  style="font-size: 12px; opacity: 0.9; width: 85%"  placeholder="Digite um local, coordenadas, etc">
+			<input id="submit-geocode" style= "font-size: 12px; width: 30px;  height: 20px; cursor:pointer;" type="button" value="Ir"><br>
+		</div>
+		</div>
+		
+
+<script> google.load('visualization', '1', {packages: ['columnchart']});</script>
+<script>
+
+$( "#ToggleCluster" ).on( "click", function() {
+	
+	if( $("#ToggleHeatMap").prop('disabled') == true ){
+		HeatmapActivated = 0;
+		//Hide the apearence of the heatmap
+		heatmap.setMap(null);
+		
+		//make the heatMap Button clickable again
+		$("#ToggleHeatMap").prop('disabled', false);
+		
+		//Show Marker in a cluster mode
+		$(this).prop('value', '0');
+	}
+
+	
+	if ( parseInt( $(this).prop("value") ) ==  1 ){
+		if (markerCluster) {
+			markerCluster.clearMarkers();
+			
+			if (HeatmapActivated == 0){
+				markers.forEach(function(entry) {
+					entry.setMap(map);
+				});
+				$(this).html('Aglomerado');
+				$(this).prop('value', '0');
+				
+			}else{
+				markers.forEach(function(entry) {
+					entry.setMap(null);
+				});
+			}
+			
+		}
+	}else{
+		markerCluster = new MarkerClusterer(map, markers, {
+			maxZoom: 16, //Max zoom that the MarkerCluster works
+			gridSize: 40, //radius to count the markers  
+			imagePath: 'Icons_Images/cluster/m'
+		});
+		$(this).html('Ver Pontos');
+		$(this).prop('value', '1'); 
+	}
+});
+
+var heatmap;
+var HeatmapActivated = 0;
+$( "#ToggleHeatMap" ).on( "click", function() {
+	
+	$( "#ToggleCluster" ).prop('value', '1'); 
+	$("#ToggleCluster").html('Aglomerado');
+	HeatmapActivated = 1;
+	
+	heatmap = new google.maps.visualization.HeatmapLayer({
+		data: HeatMap_markers,
+		map: map
+	});
+	
+	var HeatMapRadius = DefineHeatMapRadius(); //Greater the zoom, greater the Radius
+	heatmap.set('radius', HeatMapRadius );
+			
+	$( "#ToggleCluster" ).click(); //Clear the Cluster/marker. It keeps only the HeatMap Layer
+	
+	$(this).prop('disabled', true);
+
+});
+
+function DefineHeatMapRadius() {
+	var ZoomLevel = map.getZoom();
+	
+	if ( ZoomLevel <= 5 ) {
+		return 1;
+	}else if ( ZoomLevel == 6 ){
+		return 5;
+	}else if ( ZoomLevel == 7 ){
+		return 7;
+	}else if ( (ZoomLevel > 7) && (ZoomLevel <= 8) ){
+		return 10;
+	}else if ( (ZoomLevel > 8) && (ZoomLevel <= 9) ){
+		return 20;
+	}else if ( ZoomLevel == 10 ){
+		return 25;
+	}else if ( (ZoomLevel > 10) && (ZoomLevel < 12) ){
+		return 30;
+	}else if ( ZoomLevel == 12 ){
+		return 35;
+	}else if ( (ZoomLevel > 12) && (ZoomLevel <= 14) ){
+		return 40;
+	}else if ( ZoomLevel == 15 ){
+		return 37;
+	}else if ( ZoomLevel == 16 ){
+		return 34;
+	}else if ( ZoomLevel > 16 ){
+		return 30;
+	}
+
+}
+
+WhichBrowser();
+function WhichBrowser(){
+	var InfoPopUp = true;
+	var SpecialDIV = true;
+	var UsersBrowser = "IE";
+	
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+    if (msie > 0) // If Internet Explorer, return version number
+    {
+		UsersBrowser = "Internet Explorer";
+		//InfoPopUp = false;
+		//SpecialDIV = false;
+    }
+
+	//Chrome
+	if((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) && (navigator.userAgent.toLowerCase().indexOf('safari') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "chrome";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	//Firefox
+	if((navigator.userAgent.toLowerCase().indexOf('firefox') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "firefox";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	//Safari
+	if((navigator.userAgent.toLowerCase().indexOf('safari') > -1) && !(navigator.userAgent.toLowerCase().indexOf('chrome') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "Safari";
+		//InfoPopUp = false;
+		SpecialDIV = false;
+	}
+
+	//Opera
+	if(navigator.appName == "Opera"){
+		UsersBrowser =  "Opera";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	
+
+
+	if ( InfoPopUp )
+	{
+		var AlertMessage = "Este site ficará melhor visualizado utilizando o navegador Google Chrome."+
+		"Faça o download do Chrome utilizando o link abaixo:";
+		prompt(AlertMessage, "https://www.google.com/chrome/browser/desktop/index.html")
+		
+	}
+	
+	if ( SpecialDIV ){
+	
+		$("#MSIE").css("display", "block");
+
+	}
+	
+}
+
+$( "#SetRadius" ).on( "click", function() {
+	Circle_Path.set('radius', parseFloat( $( "#Radius" ).val() ));
+});
+
+$( "#Calc_Dist_DIV" ).on( "click", function() {
+	console.log("Clicked");
+	
+	if (typeof $(this).prop("value")  == "undefined"){
+		$(this).prop('value', '0'); 
+	}
+
+	if ( $(this).prop("value") == '0' ) { // Create path
+		document.getElementById('Distance').value = 0;
+		$("#ToolBoxButton").css({'background-color' : 'red'});
+		
+		$("#ToolBoxButton").css({'background-color' : 'red'});
+		$("#ToolBoxButton").css({'background' : '-webkit-linear-gradient(#F90600, #FF4C47)'});
+		$("#ToolBoxButton").css({'background' : 'linear-gradient(#F90600, #FF4C47)'});
+		$("#ToolBoxButton").css({'box-shadow' : '0 1px 0 #6F0B00, 0 5px 0 #8C1003, 0 6px 6px rgba(113, 13, 2,0.6)'});
+		
+	
+		$( "#ToolBox_Note" ).text("Clique no Mapa para criar o traçado.");
+		$( "#ToolBox_Comment" ).text("Para cancelar o traçado, clique com o botão direito ou clique no botão acima.");
+		
+		if ($("#RadioCircle").is(":checked")){
+			Circle_Path.setMap(map);
+		}
+		else if ($("#RadioArea").is(":checked")){
+			Area_Path.setMap(map);
+		}
+		else if ($("#RadioPoint").is(":checked")){
+			Marker_Path.setMap(map);
+		}
+		else if ($("#RadioDist").is(":checked")){
+			Line_Path.setMap(map);
+		}
+		
+		//Set the Unit when the editing started.
+		UnitConversionLast = $( "#UnitConversion" ).prop("value");
+		
+		$(this).prop('value', '1'); 
+		
+	} else { // Erase path
+		
+		Clear_CalcDist_Path();
+	}
+
+});
+
+function Clear_CalcDist_Path() {
+	$("#Calc_Dist_DIV").prop('value', '0');
+	$("#ToolBoxButton").css({'background-color' : 'green'});
+	$("#ToolBoxButton").css({'background' : '-webkit-linear-gradient(#2FBB11, #56D33C)'});
+	$("#ToolBoxButton").css({'background' : 'linear-gradient(#2FBB11, #56D33C)'});
+	$("#ToolBoxButton").css({'box-shadow' : '0 1px 0 #20780D, 0 5px 0 #136B00, 0 6px 6px rgba(16, 93, 0,0.6)'});
+
+	if ( typeof pathLine  != "undefined"){
+		pathLine.clear();
+	}
+	
+	Line_Path.setMap(null);
+	Area_Path.setMap(null);
+	Circle_Path.setMap(null);
+	Marker_Path.setMap(null);
+	
+	document.getElementById('Distance').value = "";
+	
+	$( "#ToolBox_Note" ).text("Para usar essa ferramenta:");
+	$( "#ToolBox_Comment" ).text("Clique no botão VERDE para começar a desenhar o traçado.");
+	$( "#Radius" ).val("");
+}
+
+
+$( "#Calculadora_Radio" ).on( "change", ".radio_Calc ", function() {
+	Clear_CalcDist_Path();
+	
+	var select = document.getElementById("UnitConversion");
+	
+	select.options.length = 0;
+	var UnitConversion;
+	
+	if ( $(this).attr("value") == "dist" ) { //User checked "Distance"
+		UnitConversion = document.createElement("option");
+		//Adding Meters
+		UnitConversion.textContent = "m";
+		UnitConversion.value = 1;
+		select.appendChild(UnitConversion);
+		
+		UnitConversion = document.createElement("option");
+		//Adding Km
+		UnitConversion.textContent = "Km";
+		UnitConversion.value = 1000;
+		select.appendChild(UnitConversion);
+	}
+	else if ( $(this).attr("value") == "area" ) { //User checked "Area"
+		UnitConversion = document.createElement("option");
+		//Adding Meters2
+		UnitConversion.textContent = "m2";
+		UnitConversion.value = 1;
+		select.appendChild(UnitConversion);
+		
+		UnitConversion = document.createElement("option");
+		//Adding Km2
+		UnitConversion.textContent = "Km2";
+		UnitConversion.value = 1000000;
+		select.appendChild(UnitConversion);
+		
+		
+		UnitConversion = document.createElement("option");
+		//Adding Hectare
+		UnitConversion.textContent = "Hect";
+		UnitConversion.value = 10000;
+		select.appendChild(UnitConversion);
+		
+	}else if ( $(this).attr("value") == "pnt" ) { //User checked "Area"
+		UnitConversion = document.createElement("option");
+		//Adding DD
+		UnitConversion.textContent = "Graus";
+		select.appendChild(UnitConversion);
+		
+		UnitConversion = document.createElement("option");
+		//Adding DMS
+		UnitConversion.textContent = "GMS";
+		select.appendChild(UnitConversion);
+	}
+	
+	if ( $(this).attr("id") == "RadioCircle" ) {
+		$( "#Radius" ).show();
+		$( "#RadiusTxt" ).show();
+		$( "#RadiusUnitTxt" ).show();
+		$( "#SetRadius" ).show();
+	}else{
+		$( "#RadiusTxt" ).hide();
+		$( "#RadiusUnitTxt" ).hide();
+		$( "#Radius" ).hide();
+		$( "#SetRadius" ).hide();
+	}
+	
+	if ( $(this).attr("id") == "RadioDist" ) {
+		$( "#SeeElevation" ).show();
+	}else{
+		$( "#SeeElevation" ).hide();
+		$( "#elevation_chart" ).hide();
+		$( "#CloseChart" ).hide();
+	}
+	
+	
+});
+
+//Stores the last unit used before the user changes it.
+var UnitConversionLast;
+//change the value of the distance to the desired unit.
+$( "#UnitConversion" ).on( "change", function() {
+	var Distance;
+	var UnitConversion;
+	var FinalValue;
+	
+	//Always return to meters before convert to another unit.
+	//convert to meters
+	if ( $('#Distance').val() ){
+		Distance = (parseFloat($('#Distance').val()))*UnitConversionLast;
+	
+		//get the unit conversion to divide the number
+		UnitConversion = $(this).prop("value");
+		
+		//divide and convert to string with 3 decimal places
+		FinalValue = ((Distance/UnitConversion).toFixed(3)).toString();
+		
+		//change the last unit conversion value
+		UnitConversionLast = $(this).prop("value");
+		
+		//Debug
+		//window.alert(Distance + " -- " + UnitConversion + " -- " + FinalValue + " -- " + UnitConversionLast);
+		
+		//display it
+		$("#Distance").val(FinalValue);
+		
+	}else{
+		$("#Distance").val("");
+	
+	}
+	
+});
+
+
+
+var mouseX;
+var mouseY;
+//Creates a invisible DIV for the Regions hover
+$(document).mousemove( function(e) {
+   mouseX = e.pageX; 
+   mouseY = e.pageY;
+}); 
+
+//Function to Sort by text ignoring the first option
+function sortDropDownListByText(selectId) {
+    var foption = $('#'+ selectId + ' option:first');
+    var soptions = $('#'+ selectId + ' option:not(:first)').sort(function(a, b) {
+		//sort ignoring the Accents
+		return (a.text).localeCompare(b.text);
+    });
+	//Select the first option as a default 
+    $('#' + selectId).html(soptions).prepend(foption);              
+};
+
+
+
+$( "#SeeElevation" ).on( "click", function() {
+	$( "#elevation_chart" ).show();
+	$( "#CloseChart" ).show();
+});
+
+$( "#CloseChart" ).on( "click", function() {
+	$( "#elevation_chart" ).hide();
+	$( "#CloseChart" ).hide();
+});
+
+//drags the boxes aroung
+$(function() {
+	$( "#LegendBox" ).draggable();
+	$( "#GraphBox" ).draggable();
+	$( "#ToolBox" ).draggable();
+	$( "#elevation_chart" ).draggable();
+	$( "#ToolBox_Control" ).draggable();
+});
+
+//trigger enter button pressed
+$('#address').keypress(function(e){
+  if(e.keyCode==13)
+	$('#submit-geocode').click();
+});
+
+$('#FilterDiv').keypress(function(e){
+  if(e.keyCode==13)
+	$('#ButtonFiltro').click();
+});
+
+//We use .on to tackle with the dynamic nature of the HTML
+$( "#CheckboxMaxMin" ).on( "click", function() {
+	if ( $(this).prop("value") == '0' ) { // Maximize all
+		$('.FiltroCategory').each(function () {
+			var CategoryCod = $(this).attr("name")
+			$( "#div_classe_geral-"+CategoryCod ).show( );
+			$( "#span_classe_geral-"+CategoryCod ).text("–");
+		});
+		
+		$(this).html('Fechar Tópicos');
+		$(this).prop('value', '1'); 
+		
+	} else { //Minimize all
+		$('.FiltroCategory').each(function () {
+			var CategoryCod = $(this).attr("name")
+			$( "#div_classe_geral-"+CategoryCod ).hide( );
+			$( "#span_classe_geral-"+CategoryCod ).text("+");
+		});
+		
+		$(this).html('Abrir Tópicos'); 
+		$(this).prop('value', '0');
+	}
+});
+
+//We use .on to tackle with the dynamic nature of the HTML
+$( "#FilterDiv" ).on( "change", ".psqGeral", function() {
+	//window.alert($(this).attr("name"));
+	if ($(this).prop("checked")) { //User checked any
+		$(".psqEspecifica[name=" + $(this).attr("name") + "]").prop("checked", true)
+	}
+	else{ //User checked any
+		$(".psqEspecifica[name=" + $(this).attr("name") + "]").prop("checked", false)
+	};
+
+	
+});
+
+//We use .on to tackle with the dynamic nature of the HTML
+$( "#FilterDiv" ).on( "change", ".psqEspecifica", function() {
+
+	//window.alert($(this).attr("name"));
+	
+	$(".psqGeral[name=" + $(this).attr("name") + "]").prop("checked", true);
+
+	if($(".psqEspecifica[name=" + $(this).attr("name") + "]:checked").length == 0){
+		$(".psqGeral[name=" + $(this).attr("name") + "]").prop("checked", false);
+	}
+
+	
+});
+
+
+$( "#Ajuda-overlay-back " ).on( "click", function() {
+	$('#AjudaBox, #Ajuda-overlay-back ').fadeOut("fast" ); 
+});
+
+$( "#Form-overlay-back " ).on( "click", function() {
+	$('#FormBox, #Form-overlay-back ').fadeOut("fast" ); 
+});
+
+
+//Construct the filter when the map loads
+function ConstructFilter(rows) {
+	var Cities_Duplicate = [];
+	var Dates_Duplicate = [];
+	var ObjColumns = []; //contains arrays in the following format: [{ category: rows[i][2] , description: rows[i][5] }]. Only Unique pairs
+	var categoryArray = [];  // array of only unique values of the MAJOR GROUP ->> in this case is the column "Tipo do Ocorrido"
+	var found, ul, li, liHTML, span;
+	for (var i in rows) {
+		if ( typeof( rows[i][2] ) !== "undefined" ) {
+			found = jQuery.inArray( rows[i][2] , categoryArray); // if found the value in the array returns its position
+			if (found < 0) { //return "-1" if didn't find it
+				categoryArray.push( rows[i][2] );
+			}
+			
+			var element = { category: rows[i][2] , description: rows[i][5], classe: rows[i][6] };
+			ObjColumns.pushIfNotExist(element, function(e) { 
+				return e.category === element.category && e.description === element.description && e.classe === element.classe; 
+			});
+		
+			
+		}
+		if ( typeof( rows[i][11] ) !== "undefined" ) { //If one is undefined all the other columns are undefined
+			Cities_Duplicate.push( rows[i][11] );
+			
+			var DateSlice = ( rows[i][4] ).split("/"); // 01/30/1992
+			if (DateSlice[0].length == 1){
+				DateSlice[0] = '0'+DateSlice[0];
+			}
+			if (DateSlice[1].length == 1){
+				DateSlice[1] = '0'+DateSlice[1];
+			}
+			var DataRightFormat = DateSlice[2] +"-"+ DateSlice[0] +"-"+ DateSlice[1];
+	
+			Dates_Duplicate.push( DataRightFormat );
+		}
+		
+		
+		
+	}
+	
+	//Get only the Unique values for the city
+	var Cities_uniques = (Cities_Duplicate.unique()).sort(); // result = [1,3,4,2,8]
+	var Dates_Duplicate = (Dates_Duplicate).sort();  
+
+
+	//console.log( categoryArray );
+	
+	var ul = document.createElement('ul');
+    ul.setAttribute('class','FiltroCategory');
+	document.getElementById('FilterDiv').appendChild(ul);
+	
+/*
+<ul>	
+	<li class="FiltroCategory" name="ClassesCrimes" >Tipos de Crime
+		<span class='AbrirGrupos'>[<a class='PlusSign'  onClick='toggleClassGeral(this)'><span id='span_classe_geral-ClassesCrimes'>+</span></a>]</span> 
+	</li>
+	<div class="classeGeral" id='div_classe_geral-ClassesCrimes'>
+		<label class="filtro-checkbox'">
+			<input type='checkbox' class='psqGeral' name='Crime_0' value=''> Contra a Fauna
+		</label>
+		<span class='AbrirSubGrupos'>[<a class='PlusSign' onClick='toggleClassEspecifica(this)'><span id='span_classe_especifica-Crime_0'>+</span></a>]</span> 
+			<div class='classeEspecifica' id='div_classe_especifica-Crime_0'>
+				<label class="filtro-checkbox">
+					<input type='checkbox' class='psqEspecifica' name='Crime_0'  value='M31289' > Apreensão de animais<br>
+				</label>
+				
+			</div>
+		<br>
+</ul>					
+*/
+	//######################################
+	//Tipos de Crime
+	var NameLi = "ClasseCrimes";
+	var li = document.createElement('li');
+	li.setAttribute('class','FiltroCategory');
+	li.setAttribute('name', NameLi );
+	ul.appendChild(li);
+	li.innerHTML= "Tipos de Crime"+"<span class='AbrirGrupos'>[<a class='PlusSign' onClick='toggleClassGeral(this)'><span id='span_classe_geral-"+NameLi+"'>+</span></a>]</span>"; 
+	
+	var DivGroup = document.createElement("div");
+	DivGroup.setAttribute('class','classeGeral');
+	DivGroup.setAttribute('id', 'div_classe_geral-'+ NameLi);
+	for (var i=0; i<categoryArray.length; i++){ 
+		
+		var NumberId = "Crime_"+i.toString();
+		var CrimeGroupName = categoryArray[i];	
+		
+		var newInput = document.createElement("input");
+		newInput.setAttribute("type",'checkbox');
+		newInput.setAttribute("id", NumberId);
+		newInput.setAttribute("class",'psqGeral');
+		newInput.setAttribute("name", NumberId);
+		newInput.setAttribute("value",'Código Subclasse');
+		DivGroup.appendChild(newInput);
+		
+		var newlabel = document.createElement("label");
+		newlabel.setAttribute("class",'filtro-checkbox');
+		newlabel.setAttribute("for",NumberId);
+		newlabel.innerHTML = CrimeGroupName;
+		DivGroup.appendChild(newlabel);
+		
+		var newSpan= document.createElement("span");
+		newSpan.setAttribute("class",'AbrirSubGrupos');
+		newSpan.innerHTML = "[<a class='PlusSign' name='"+NumberId+"' onClick='toggleClassEspecifica(this)'><span id='span_classe_especifica-"+NumberId+"'>+</span></a>]";
+		DivGroup.appendChild(newSpan);
+		
+		DivGroup.appendChild(document.createElement("br"));
+		
+		var DivSubGroup = document.createElement("div");
+		DivSubGroup.setAttribute('class','classeEspecifica');
+		DivSubGroup.setAttribute('id', 'div_classe_especifica-'+ NumberId); 
+	
+		for (var j=0; j<ObjColumns.length; j++){
+			//console.log( ObjColumns[j].category );
+			if ( (ObjColumns[j].category) != CrimeGroupName) continue; //if it's the same category, get the description column down below
+			
+			var NumberSubId = NumberId+j.toString();
+			var newInput = document.createElement("input");
+			newInput.setAttribute("type",'checkbox');
+			newInput.setAttribute("id", NumberSubId);
+			newInput.setAttribute("class",'psqEspecifica');
+			newInput.setAttribute("name", NumberId);
+			newInput.setAttribute("value", (ObjColumns[j].classe).toString() );
+			DivSubGroup.appendChild(newInput);
+			
+			var newlabel = document.createElement("label");
+			newlabel.setAttribute("class",'filtro-checkbox');
+			newlabel.setAttribute("for",NumberSubId);
+			newlabel.innerHTML = ObjColumns[j].description;
+			DivSubGroup.appendChild(newlabel);
+			
+			DivSubGroup.appendChild(document.createElement("br"));
+		}
+		
+		DivGroup.appendChild(DivSubGroup);
+		
+		//console.log( ObjColumns[i].category );
+	}
+	ul.appendChild(DivGroup);
+	ul.appendChild(document.createElement("br"));
+	
+	//######################################
+	//Municipios
+	var NameLi = "ClasseMunicipios";
+	var li = document.createElement('li');
+	li.setAttribute('class','FiltroCategory');
+	li.setAttribute('name', NameLi );
+	ul.appendChild(li);
+	li.innerHTML= "Municípios"+ //MUDAR AQUI
+	"<span class='AbrirGrupos'>[<a class='PlusSign' onClick='toggleClassGeral(this)'><span id='span_classe_geral-"+
+	NameLi+"'>+</span></a>]</span>"; 
+	
+	var DivGroup = document.createElement("div");
+	DivGroup.setAttribute('class','classeGeral');
+	DivGroup.setAttribute('id', 'div_classe_geral-'+ NameLi);
+	
+		
+	var NumberId = "City_"; //MUDAR AQUI
+	
+	var newInput = document.createElement("input");
+	newInput.setAttribute("type",'checkbox');
+	newInput.setAttribute("id", NumberId);
+	newInput.setAttribute("class",'psqGeral');
+	newInput.setAttribute("name", NumberId);
+	newInput.setAttribute("value",'Município'); //MUDAR AQUI -- Nome da coluna na FT
+	DivGroup.appendChild(newInput);
+	
+	var newlabel = document.createElement("label");
+	newlabel.setAttribute("class",'filtro-checkbox');
+	newlabel.setAttribute("for",NumberId);
+	newlabel.innerHTML = "Todos..."; //MUDAR AQUI - Categoria que irá aparecer
+	DivGroup.appendChild(newlabel);
+	
+	var newSpan= document.createElement("span");
+	newSpan.setAttribute("class",'AbrirSubGrupos');
+	newSpan.innerHTML = "[<a class='PlusSign' name='"+NumberId+"' onClick='toggleClassEspecifica(this)'><span id='span_classe_especifica-"+NumberId+"'>+</span></a>]";
+	DivGroup.appendChild(newSpan);
+	
+	DivGroup.appendChild(document.createElement("br"));
+	
+	var DivSubGroup = document.createElement("div");
+	DivSubGroup.setAttribute('class','classeEspecifica');
+	DivSubGroup.setAttribute('id', 'div_classe_especifica-'+ NumberId); 
+
+	for (var j=0; j<Cities_uniques.length; j++){
+		
+		var NumberSubId = NumberId+j.toString();
+		var newInput = document.createElement("input");
+		newInput.setAttribute("type",'checkbox');
+		newInput.setAttribute("id", NumberSubId);
+		newInput.setAttribute("class",'psqEspecifica');
+		newInput.setAttribute("name", NumberId);
+		newInput.setAttribute("value", Cities_uniques[j] );
+		DivSubGroup.appendChild(newInput);
+		
+		var newlabel = document.createElement("label");
+		newlabel.setAttribute("class",'filtro-checkbox');
+		newlabel.setAttribute("for",NumberSubId);
+		newlabel.innerHTML = Cities_uniques[j];
+		DivSubGroup.appendChild(newlabel);
+		
+		DivSubGroup.appendChild(document.createElement("br"));
+	}
+	
+	DivGroup.appendChild(DivSubGroup);
+	
+	//console.log( ObjColumns[i].category );
+	ul.appendChild(DivGroup);
+	ul.appendChild(document.createElement("br"));
+	
+	//######################################
+	// Date
+	var NameLi = "ClasseDate";
+	var li = document.createElement('li');
+	li.setAttribute('class','FiltroCategory');
+	li.setAttribute('name', NameLi );
+	ul.appendChild(li);
+	li.innerHTML= "Data"+ //MUDAR AQUI
+	"<span class='AbrirGrupos'>[<a class='PlusSign' onClick='toggleClassGeral(this)'><span id='span_classe_geral-"+
+	NameLi+"'>+</span></a>]</span>"; 
+	
+	var DivGroup = document.createElement("div");
+	DivGroup.setAttribute('class','classeGeral');
+	DivGroup.setAttribute('id', 'div_classe_geral-'+ NameLi);
+	
+	// default value of date : http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_input_date_defaultvalue3
+	var newElement = document.createElement("span");
+	newElement.innerHTML = "Início: ";
+	DivGroup.appendChild(newElement);
+	var newInput = document.createElement("input");
+	newInput.setAttribute("type",'date');
+	newInput.setAttribute("id", "FiltroDate_Input-1");
+	//set the defaut value for the Lowest date till the higher	
+	newInput.setAttribute("value", Dates_Duplicate[0] );
+	DivGroup.appendChild(newInput);
+	
+	var newElement = document.createElement("span");
+	newElement.innerHTML = "<br>Fim: ";
+	DivGroup.appendChild(newElement);
+	var newInput = document.createElement("input");
+	newInput.setAttribute("type",'date');
+	newInput.setAttribute("id", "FiltroDate_Input-2");
+	newInput.setAttribute("value", Dates_Duplicate[Dates_Duplicate.length-1] );
+	DivGroup.appendChild(newInput);
+	
+
+	DivGroup.appendChild(document.createElement("br"));
+	
+	//console.log( ObjColumns[i].category );
+	ul.appendChild(DivGroup);
+	ul.appendChild(document.createElement("br"));
+	
+	
+	//######################################
+	//Classificacao dos Crimes
+	var NameLi = "ClasseClassificacao";
+	var li = document.createElement('li');
+	li.setAttribute('class','FiltroCategory');
+	li.setAttribute('name', NameLi );
+	ul.appendChild(li);
+	li.innerHTML= "Classificação Crimes"+ //MUDAR AQUI
+	"<span class='AbrirGrupos'>[<a class='PlusSign' onClick='toggleClassGeral(this)'><span id='span_classe_geral-"+
+	NameLi+"'>+</span></a>]</span>"; 
+	
+	var DivGroup = document.createElement("div");
+	DivGroup.setAttribute('class','classeGeral');
+	DivGroup.setAttribute('id', 'div_classe_geral-'+ NameLi);
+	
+		
+	var NumberId = "Classificacao_"; //MUDAR AQUI
+	
+	var newInput = document.createElement("input");
+	newInput.setAttribute("type",'checkbox');
+	newInput.setAttribute("id", NumberId);
+	newInput.setAttribute("class",'psqGeral');
+	newInput.setAttribute("name", NumberId);
+	newInput.setAttribute("value",'Classificação'); //MUDAR AQUI -- Nome da coluna na FT
+	DivGroup.appendChild(newInput);
+	
+	var newlabel = document.createElement("label");
+	newlabel.setAttribute("class",'filtro-checkbox');
+	newlabel.setAttribute("for",NumberId);
+	newlabel.innerHTML = "Todos..."; //MUDAR AQUI - Categoria que irá aparecer
+	DivGroup.appendChild(newlabel);
+	
+	var newSpan= document.createElement("span");
+	newSpan.setAttribute("class",'AbrirSubGrupos');
+	newSpan.innerHTML = "[<a class='PlusSign' name='"+NumberId+"' onClick='toggleClassEspecifica(this)'><span id='span_classe_especifica-"+NumberId+"'>+</span></a>]";
+	DivGroup.appendChild(newSpan);
+	
+	DivGroup.appendChild(document.createElement("br"));
+	
+	var DivSubGroup = document.createElement("div");
+	DivSubGroup.setAttribute('class','classeEspecifica');
+	DivSubGroup.setAttribute('id', 'div_classe_especifica-'+ NumberId); 
+
+	var Classificacao_Uniques = ["Leve", "Media", "Grave", "Gravissima", "NODATA"];
+	
+	for (var j=0; j<Classificacao_Uniques.length; j++){
+		
+		var NumberSubId = NumberId+j.toString();
+		var newInput = document.createElement("input");
+		newInput.setAttribute("type",'checkbox');
+		newInput.setAttribute("id", NumberSubId);
+		newInput.setAttribute("class",'psqEspecifica');
+		newInput.setAttribute("name", NumberId);
+		newInput.setAttribute("value", Classificacao_Uniques[j] );
+		DivSubGroup.appendChild(newInput);
+		
+		var newlabel = document.createElement("label");
+		newlabel.setAttribute("class",'filtro-checkbox');
+		newlabel.setAttribute("for",NumberSubId);
+		newlabel.innerHTML = Classificacao_Uniques[j];
+		DivSubGroup.appendChild(newlabel);
+		
+		DivSubGroup.appendChild(document.createElement("br"));
+	}
+	
+	DivGroup.appendChild(DivSubGroup);
+	
+	//console.log( ObjColumns[i].category );
+	ul.appendChild(DivGroup);
+	ul.appendChild(document.createElement("br"));
+	
+	//######################################
+}
+
+
+
+
+//Function when the FiltroBox Button is pressed
+function CreateQueryToFusionTable(){
+	var ColumnsSelected = [];
+	var TotalValues = []; //treat it in a different way.
+	var Values;
+	var ColumnID = -1;
+	var QueryCreation = "";
+	var PreviousName = "";
+	var j = 0;
+	var ClassGeralValue;
+	
+	//ATTENTION
+	//The CheckBox that has Class psqGeral is the category and the class psqEspecifica is the Subcategory
+	//If a psqGeral has subcategory it must NOT have VALUE and it MUST Have the same name of its subcategory checkbox
+	//If a psqGeral doesn't have a subcategory it MUST have VALUE (which is the column to search) and it must NOT Have NAME
+	
+	
+	
+	$('input[type=checkbox].psqEspecifica:checked').each(function () {
+	
+		ClassGeralValue = $('input[type=checkbox].psqGeral[name='+$(this).attr("name")+']').attr("value");
+		if ( PreviousName != ClassGeralValue ){
+			if (typeof Values != "undefined"){ //If it's not declared
+				TotalValues.push(Values);
+			}
+			
+			Values = [];
+			
+			PreviousName = ClassGeralValue;
+			console.log("---------"+PreviousName+"---------");
+			
+			ColumnsSelected.push( PreviousName );
+			Values.push( $(this).attr("value") );
+			
+		}else{
+			Values.push( $(this).attr("value") );
+			
+		}
+		
+	});
+	TotalValues.push(Values);
+	//console.log("==Nome das colunas== Len: "+ColumnsSelected.length.toString());
+	//console.log(ColumnsSelected);
+	//console.log("==Nome dos valores== Len: "+TotalValues.length.toString());
+	//console.log(TotalValues);
+	
+	var TamArray1 = ColumnsSelected.length;
+	for (var i=0; i < TamArray1;  i++) { 
+		
+		QueryCreation += "\'"+ ColumnsSelected[i] + "\'";
+		QueryCreation += " IN (";
+		
+		var TamArray2 = TotalValues[i].length;
+		for (var j=0; j < TamArray2;  j++) {
+			QueryCreation += "\'"+ TotalValues[i][j] +"\'";
+			if (j < (TamArray2 -1) ){
+				QueryCreation += ", ";
+			}
+		}
+		QueryCreation += ")";
+		
+		if (i < (TamArray1 -1)){
+			QueryCreation += " AND ";
+		}
+		
+	}
+	
+	if( TamArray1 > 0){ // There's some checkbox selected
+		QueryCreation += " AND ";
+	}
+	
+	
+	if ( document.getElementById("FiltroDate_Input-1").value == "" ){
+		document.getElementById("FiltroDate_Input-1").value = document.getElementById("FiltroDate_Input-1").defaultValue;	
+	}
+	if ( document.getElementById("FiltroDate_Input-2").value == "" ){
+		document.getElementById("FiltroDate_Input-2").value = document.getElementById("FiltroDate_Input-2").defaultValue;
+	}
+		
+	QueryCreation += "'Início do evento' >= \'" + document.getElementById("FiltroDate_Input-1").value +" 00:00:00\'";
+	QueryCreation += " AND ";
+	QueryCreation += "'Início do evento' <= \'" + document.getElementById("FiltroDate_Input-2").value +" 23:59:59\'";
+	
+	var DateInit = ( document.getElementById("FiltroDate_Input-1").value  ).split("-");
+	var DateEnd = ( document.getElementById("FiltroDate_Input-2").value  ).split("-");
+	
+	// Make sure the End Date is not lower than Init Date. Otherwise -> Alert it.
+	if ( parseInt(DateEnd[0]) >= parseInt(DateInit[0]) ) {
+		if ( parseInt(DateEnd[0]) == parseInt(DateInit[0]) ) {
+			//Check the month
+			if ( parseInt(DateEnd[1]) >= parseInt(DateInit[1]) ) {
+				if ( parseInt(DateEnd[1]) == parseInt(DateInit[1]) ) {
+					//Check the day
+					if ( parseInt(DateEnd[2]) < parseInt(DateInit[2]) ) {
+						window.alert("A data final é menor que a inicial! Por favor corrija!");
+					}
+				}
+			}else{
+				window.alert("A data final é menor que a inicial! Por favor corrija!");
+			}
+		}
+	}else{
+		window.alert("A data final é menor que a inicial! Por favor corrija!");
+	}
+	
+	//debug
+	console.log(QueryCreation);
+	return QueryCreation;
+}
+
+//Uncheck all checkboxes 
+function CleanCheckBoxesFiltro() {
+	$('input[type=checkbox].psqGeral:checked').each(function () {
+		$(this).prop('checked', false); // Unchecks it
+	});
+	$('input[type=checkbox].psqEspecifica:checked').each(function () {
+		$(this).prop('checked', false); // Unchecks it
+	});
+	
+	document.getElementById("FiltroDate_Input-1").value = document.getElementById("FiltroDate_Input-1").defaultValue;
+	document.getElementById("FiltroDate_Input-2").value = document.getElementById("FiltroDate_Input-2").defaultValue;
+	
+	$('#ButtonFiltro').click();
+	
+}
+
+
+//Toggle DIV classe Especifica Options from FiltroBox
+function toggleClassEspecifica(cod){
+	//"div_classe_especifica_"+cod
+	
+	var ParentObj = $(cod).parent().parent();
+    var ParentName = ($(ParentObj['context']).attr('name')); //Attribute (real) name
+	console.log("ESPECIFICA Name:---------------")
+	console.log(ParentName)
+
+	if ($( "#div_classe_especifica-"+ParentName ).css("display")=="none"){
+		$( "#div_classe_especifica-"+ParentName ).show( );
+		$( "#span_classe_especifica-"+ParentName ).text("–");
+	} else {
+	$( "#div_classe_especifica-"+ParentName ).hide( );
+		$( "#span_classe_especifica-"+ParentName ).text("+");
+	}
+}
+
+//Toggle DIV classe Geral Options from FiltroBox
+function toggleClassGeral(cod){
+	//"div_classe_geral-"+cod
+	
+	var ParentObj = $(cod).parent().parent();
+    var ParentName = ($(ParentObj[0]).attr('name')); //Attribute (real) name
+	//console.log("GERAL Name:---------------")
+	//console.log(ParentName)
+	
+	if ($( "#div_classe_geral-"+ParentName ).css("display")=="none"){
+		$( "#div_classe_geral-"+ParentName ).show( );
+		$( "#span_classe_geral-"+ParentName ).text("–");
+	} else {
+	$( "#div_classe_geral-"+ParentName ).hide( );
+		$( "#span_classe_geral-"+ParentName ).text("+");
+	}
+	
+}
+
+
+//Close Button
+function CloseDiv(element, fadeOutID = "", ToolBox = 0) {
+	$(element).closest('div').hide()
+	
+	if( fadeOutID != "" ){
+		$( "#"+ fadeOutID ).fadeOut( "fast" );
+	}
+	
+	if( ToolBox == 1){
+		Clear_CalcDist_Path();
+
+	}   
+	
+}
+
+
+</script>
+
+		<!---  Use API to create the map --->
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?&v=3.24&key=AIzaSyBFYwb6-B6u2cs5oknTRwtfBng2kgdDMgk&libraries=drawing,geometry,visualization&language=pt-BR&region=BR&callback=initMap">
+		</script>
+		
+	</body>
+</html>

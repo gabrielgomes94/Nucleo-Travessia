@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+	html, body {
+		height: 100%;
+	}
+	
+	#map_canvas { width: 800px; height: 600px; }
+</style>
+ 	  
+<script type="text/javascript">
+function initMap() {
+
+	map = new google.maps.Map(document.getElementById('map_canvas'), {
+		zoom: 10,
+		center: {lat: -18.92990560776172 , lng: -43.4406814550781}
+	});
+
+	
+	var Cities = new google.maps.Data();
+	Cities.loadGeoJson('http://nucleotravessia.unifei.edu.br/MapaTravessia/Files_LoadMap/Limites_Muni.geojson');
+	Cities.setStyle({
+			strokeColor: '#058E8E',
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+	});
+	Cities.setMap(map);
+
+}
+
+</script>
+
+<body>
+	<div id="map_canvas"></div>
+	
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?&v=3.24&key=AIzaSyBFYwb6-B6u2cs5oknTRwtfBng2kgdDMgk&libraries=drawing,geometry&language=pt-BR&region=BR&callback=initMap">
+	</script>
+</body>
+</html>

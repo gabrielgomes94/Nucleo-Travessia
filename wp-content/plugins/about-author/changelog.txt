@@ -1,0 +1,73 @@
+==version 5.0==
+Fixes
+1\12\2015
+1.Show upload button on add new post
+2.Add default url on social media button
+3.Dashboard design style conflict 				- solve
+4.social link appear
+5.Invalid file Naming                           - solve
+
+2\12\2015
+1.Make js folder
+2.Upload script change                           - solve
+
+7\12\2015
+1.Sperate template style
+2.Sperate shortcode files
+
+
+12\12\2015
+1.Icon before social link
+2.Indent code
+
+
+18\12\2015
+on select Template 5 Error - Notice: Undefined index: temp2_user_header_image in E:\wamp\www\weblizar-premium\wp-content\plugins\about-me-shorcode-and-widget-pro\settings\template5.php on line 8.                                       - solve
+Error in Font Family.                                                       -solve
+
+13\12\2015
+1.Widget name in admin is "About Me Pro".                                      -solve
+2.Text decoration on a tag on-post page.                                       -solve
+3.Help & support page is created.
+
+4/1/2016
+1.Fix name of plugin page About Me Pro.
+2.Add description.
+3.Menu Name "About Me Pro".
+4.Position "Auther setting menu at 3rd".
+5.Margin on template section design.
+6.Add option for author bio title text and scheme.
+7.Enable disable for Author bio display.
+8.Author settings page title.
+
+6/1/2016
+1.Version-5.0.
+2.Pointer image color set  white.
+3.Remove hover effect on template3 and template4.
+4.Social  icon size setting set.
+5.Template preview change.
+6.Template7 author  name center.
+7.fix  widget name "About Me Pro".
+8.Name after template5 image.
+9.Image size Note display  on every template file.
+
+
+7/1/2016
+1.Author spelling mistake at authorsetting page.
+2.Limit 325 charcter fix.
+3.Language translation fix.
+4.Text Domain  'WL_ABTM_TXT_DM' ).
+
+
+8/2/2016
+1.In our product page
+A.Load logo locally.
+B.Name Instagram Gallery
+
+2.In Help & Support Page
+A.Support link wordpress
+
+3.Author Setting Page
+A.Capitalized all first word
+B.Change Name "Go to user setting" to "Update Social profile"
+

@@ -1,0 +1,29 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                                                                  
+"features": [
+{ "type": "Feature", "properties": { "ID_OBJETO": 59853.000000, "NOME": "Dom Joaquim", "NOMEABREV": "Dom Joaquim", "GEOMETRIAA": "Não" }, "geometry": { "type": "Point", "coordinates": [ -43.256001299999895, -18.966999944999898, 0.0 ] } },
+{ "type": "Feature", "properties": { "ID_OBJETO": 60088.000000, "NOME": "Alvorada de Minas", "NOMEABREV": "Alvorada de Minas", "GEOMETRIAA": "Não" }, "geometry": { "type": "Point", "coordinates": [ -43.3659564559999, -18.733241581, 0.0 ] } },
+{ "type": "Feature", "properties": { "ID_OBJETO": 60787.000000, "NOME": "Conceição do Mato Dentro", "NOMEABREV": "Conceição do Mato Dentro", "GEOMETRIAA": "Não" }, "geometry": { "type": "Point", "coordinates": [ -43.425001154999897, -19.036999948, 0.0 ] } }
+]
+}
+
+
+{
+	"CMD1": {[
+		"Nome_Reg": " Capitão Felizardo",
+		"LavAnPer": "Cana, milho, feijão, mandioca, café",
+		"Hortali": "Possui",
+		"Pomar": "Banana, laranja, carambola, acerola, manga, uva, limão, goiaba",
+		"IndDoRu": "Queijo, doces, cachaça, farinha de mandioca, fubá de milho",
+		"ProdAni": "Galinha (ovos), suínos, gado (para atividade leiteira)",
+	]},
+	"CMD2": {[
+		"Nome_Reg": " Costa Sena e Goiabeiras",
+		"LavAnPer": "Cana, milho, feijão, mandioca, café",
+		"Hortali": "Possui",
+		"Pomar": "Banana, laranja, acerola, manga, limão, abacate e goiaba",
+		"IndDoRu": "Queijo, requeijão, polvilho, farinha de mandioca",
+		"ProdAni": "Galinha (ovos), suínos e gado (para atividade leiteira)",
+	]},

@@ -1,0 +1,367 @@
+/*
+Theme Name: Núcleo Travessia
+Theme URI: https://vinyanalista.github.io/blog/2015/08/06/wordpress-bootstrap/
+Description: Tema criado para o portal do Núcleo Travessia <a href="https://vinyanalista.github.io/blog/2015/08/06/wordpress-bootstrap/">Como criar um tema responsivo do WordPress com o Bootstrap</a>.
+Author: Antônio Vinícius Menezes Medeiros
+Author URI: https://vinyanalista.github.io/
+Version: 1.0
+Tags: responsive, white, bootstrap
+
+License: Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+License URI: http://creativecommons.org/licenses/by-sa/3.0/
+
+Este tema simples foi criado usando o exemplo Jumbotron encontrado no site do Bootstrap http://getbootstrap.com/examples/jumbotron/
+*/
+
+/* Bootstrap core CSS */
+
+/* Se preferir utilizar a própria cópia do Bootstrap, descomente a linha a seguir e comente a próxima */
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');*/
+/*@import url('lib/bootstrap/3.3.6-dist/css/bootstrap.min.css');*/
+
+/* Custom styles for this template */
+
+body { 
+    padding-top: 60px; 
+    padding-bottom: 40px; 
+}
+
+/* lib/bootstrap/3.3.5/css/bootstrap.css, linha 4662 */
+/*.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus*/
+.navbar-inverse .navbar-nav > .current_page_item > a,
+.navbar-inverse .navbar-nav > .current_page_item > a:hover,
+.navbar-inverse .navbar-nav > .current_page_item > a:focus,
+.navbar-inverse .navbar-nav > .current_page_parent > a,
+.navbar-inverse .navbar-nav > .current_page_parent > a:hover,
+.navbar-inverse .navbar-nav > .current_page_parent > a:focus {
+    color: #fff;
+    background-color: #080808;
+}
+
+.navbar{
+	border-radius: 0;
+}
+.navbar ul li{
+	display: inline;
+
+}
+.cabecalho{
+	background-color: #832714;
+	color: #EED730;
+}
+
+
+.author-box{
+	background-color: #EEEEEE;
+    padding-bottom: 10px;
+    margin: 0px;
+}
+
+.authorAvatar{
+	padding: 30px;
+	margin-top: 0px; 
+	
+}
+
+.authorInfo{
+	margin-left: 0px;
+    padding-left: 20px;
+    
+}
+
+.authorName{	
+    font-family: Verdana;                 
+    font-weight: bold;            
+    font-size:22px;
+    margin-left: 15px;
+}
+
+.authorName a:link{
+	color: #333;
+}
+.authorName a:visited{
+	color: #333;
+}
+
+.authorName a:hover{
+	text-decoration: none;
+	color: #AAA;
+}
+
+.authorDescription{
+	text-align: justify;
+	font-size: 16px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;	
+	margin-left: 15px;
+}
+
+.authorEmail{
+	font-size: 14px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	margin-left: 15px;
+}
+
+.authorWebsite{
+	font-size: 14px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	margin-left: 15px;
+}
+
+.socialIcons {	
+	display: inline;
+	margin: 0px;
+}
+
+.imgSocialIcons {
+	display: inline;
+}
+
+.imgSocialIcons img:hover{
+	text-decoration: none;
+	padding: 5px;
+	width: 60px;
+	height: 60px;
+}
+
+.socialIcons a:link{
+	text-decoration: underline;
+}
+
+.socialIcons a:hover{
+	text-decoration: none;
+	border: 1px solid #000;
+	padding: 15px;
+	
+}
+
+.lista_posts{
+	
+	border: 1px #000 solid;
+	margin-bottom: 10px;	
+	font-size: 16px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;	
+}
+.lista_posts h3{
+	margin: 15px;
+}
+
+.lista_posts p{
+	margin: 15px; 
+}
+
+.lista_posts li{
+	list-style-type: none;
+}
+
+.lista_posts_data{
+	font-size: 12px;
+}
+
+
+.rodape{
+	padding:10px;
+	background-color: #a33722 ; 
+	 
+}
+
+.rodape li{
+	list-style-type: none;
+	list-style-position: inside;
+	margin-left: -40px;
+}
+
+.rodape p{
+	font-size: 16px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+}
+.rodape h3{
+	font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	line-height: 0.1;
+	color: #fff;
+}
+
+
+.rodape a{
+	color: #fff;
+	font-size: 18px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+}
+
+.rodape a:hover{	
+	color: #aaa;
+	text-decoration: none;
+}
+
+.rodape hr{
+	line-height: 0.1;
+}
+
+.rodape2{
+	text-align: center;
+	word-spacing: 20px;	
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+}
+.rodape2 li{	
+	list-style-type: none;
+	display: inline;	
+	margin: 0px;
+}
+.rodape2  p{
+	word-spacing: 5px;
+	color: #fff;
+
+}
+
+.posts a{
+	font-family: font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+	color: #C01700
+}
+
+.posts .leia-mais{
+	color: #A11818;
+}
+
+.posts a:link{
+	color: #25120A;
+	
+}
+
+.posts a:hover{
+	color: #890000;
+}
+.posts-resumo{
+	color: #333;
+	font-size: 16px;
+	font-family: font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+
+}
+
+
+.sidebar-box{
+	background-color: #eee;
+    padding-bottom: 10px;
+    margin: 0px;
+}
+.sidebar-box hr{
+	background-color: #000;
+}
+.sidebar-title{
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	border: 1px solid #eee;
+	border-bottom: 0px solid;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:0;
+	border-bottom-left-radius:0; 	
+	background-color: #eee
+}
+
+.sidebar-body{
+	margin-top: -10px;
+}
+
+.sidebar {
+	padding-left: 0px;
+	border-radius: 5px;
+	border: 1px #fff solid;	
+}
+
+.sidebar h3{		
+	padding-top: 20px;
+	padding-left: 10px;
+	padding-bottom: 20px;
+	border: 1px solid #eee;
+	border-bottom: 0px solid;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:0;
+	border-bottom-left-radius:0; 	
+	background-color: #eee;
+	font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+}
+
+.sidebar ul{
+	background-color: #fff;
+	border: 1px #eee solid;
+	border-top-left-radius:0px;
+	border-top-right-radius:0px;
+	border-bottom-right-radius:5px;
+	border-bottom-left-radius:5px; 	
+	
+	margin-top: -10px;
+}
+
+.post-date{
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.sidebar li{
+	font-size: 16px;
+	list-style-type: none;
+	border: 1px #eee solid;
+	border-radius: 0px;	
+	padding: 10px;
+	margin-top: -1px;	
+	margin-left: -40px;
+}
+
+.sidebar li:hover{
+	background-color: #ddd;
+	
+}
+
+.sidebar a{
+	color: #C01700;
+	font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;		
+}
+.sidebar a:hover{
+	color: #890000;
+}
+
+.busca{
+	margin-top: -9px; 
+	padding-top: 10px
+}
+
+.inicial{
+	margin-top: -20px; 
+}
+
+.widget-container{
+	margin-left: 0px;
+}
+
+.entry-content{
+	font-size: 18px;
+	font-family: "Open Sans", sans-serif;
+}	
+.entry-summary{
+	font-size: 16px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+.map-content{
+	margin-top: -55px;
+	margin-bottom: -30px;
+}
+
+#loginform-mapa{
+	margin: 50px;
+	border: 1px solid #000;
+
+}
+
+.entry-content img{
+	max-width: 100%;
+height: auto;
+}
+
+
+img.alignnone {float: none;margin: 5px 05px 0;}
+img.aligncenter {display: block;float: none;margin: 5px auto;}
+img.alignleft {float: left;margin: 5px 5px 10px 0px;}
+img.alignright {float: right;margin: 5px 5px 10px;}

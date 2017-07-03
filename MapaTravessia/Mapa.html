@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--- 
+		* Author: Matheus Siqueira Barros
+		* E-mail: matheus.eco.2010@gmail.com
+		*
+		* Last Modified: Jul 26, 2016
+		--->
+		<!--- Website Title  --->
+		<title>Mapa - Travessia</title>
+		<meta name="viewport" content="initial-scale=1.0">
+		<meta charset="utf-8">
+		<link href="StyleSheets/main.css" rel="stylesheet" type="text/css">
+		<link href="StyleSheets/InfoWindowStyle.css" rel="stylesheet" type="text/css">
+		
+		<!---  Page Icon  --->
+		<link rel="icon" href="Icons_Images/TravessiaIcon.ico">
+
+		<!---  MetaData  --->
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="https://dl.dropboxusercontent.com/u/39041929/site/MapaTravessia/Icons_Images/travessia.jpg" />
+		<meta property="og:title" content="Mapa Núcleo Travessia" />
+		<meta property="og:site_title" content="Mapa Núcleo Travessia" />
+		<meta property="og:description" content="Acesse as regiões mapeadas pelo Núcleo Travessia que foram classificadas como diretamente afetadas pelas atividades de mineração da empresa Anglo American"/>
+				
+		<!---  Importing files --->
+		<script src="Includes/jquery-1.12.3.min.js"></script>
+		<script src="Includes/jquery-ui.js"></script>
+		<script src="Includes/GMaps_NucleoTravessia.js"></script>
+		<script src="Includes/FunctionsControl.js"></script>
+		<script src="Includes/Function_Process.js"></script>
+		<script src="Includes/ClickInfo_FusionTable.js"></script>
+
+
+	</head>
+	
+	<body>
+		
+		
+		<div id="MSIE">
+			<p> 
+				Devido a inefiência do Internet Explorer, esse site não desempenha as
+				funções adequadas, deixando o site com diversas limitações.
+				Por favor utilize navegadores mais modernos como o 
+				Google Chrome ou o Mozilla Firefox.
+				<a target="_blank" href="https://www.google.com/chrome/browser/desktop/">Clique aqui</a> para fazer o download do Chrome.
+				<a target="_blank" href="https://www.mozilla.org/pt-BR/firefox/new/">Clique aqui</a> para fazer o download do Mozilla Firefox.
+			
+			</p> 
+		</div>
+		
+		<div id="RegionHover">
+			<span id='RegionHoverComment'></span><br>
+		</div>
+		
+
+		<!---  Empty DIV for the Map  --->
+		<div id="map"></div>
+		
+		<div id="ToolBox">
+			<span id='close' onclick='CloseDiv(this,"", 1)'>x</span>
+			<p class="DivTitle">Calcular Medidas</p> <hr>
+			<table id="ToolBoxTable">
+
+				<div id="Calculadora_Radio">
+					<input type="radio" class="radio_Calc" name="calcular" value="dist" id="RadioDist" checked />
+					<label for="RadioDist">Distância</label>
+					<input type="radio" class="radio_Calc" name="calcular" value="area" id="RadioArea" />
+					<label for="RadioArea">Área</label>
+				</div>
+
+				<tr>
+					<td class="ToolBoxButtonDiv">
+						<div id="Calc_Dist_DIV"  style=" margin: 3px; width:30px; height:30px; ">
+							<button type="button" id="ToolBoxButton" ></button>
+						</div>
+					</td>
+					<td class="ToolBoxTxt">  Tamanho do traçado: 
+					<input id="Distance" type="text" style="width: 165px;cursor:grab;" > 
+					<select id="UnitConversion">
+						<option value=1>m</option>
+						<option value=1000>km</option>
+					</select>
+					
+					
+					</td>
+				</tr>
+			</table>
+			<br>
+			<div style="text-align: left">
+				<span id='ToolBox_Note'>Para usar essa ferramenta:</span><br>
+				<span id='ToolBox_Comment'>Clique no botão VERDE para começar a desenhar o traçado.</span><br>
+			</div>
+		</div>
+					
+		<!---  Add DIV Legenda --->
+		<div id="LegendBox">
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Legenda</p> <hr>
+			<table id="LegendTable">
+				<tr>
+					<td class="LegendImg">
+						<div style="background-color: rgba(165,198,3, 0.7); margin: 3px; width:30px; height:30px; border: 0.8px solid white; ">
+						</div>
+					</td>
+					<td class="LegendTxt">Regiões em estudo de Alvorada de Minas</td>
+				</tr>
+				<tr>
+					<td class="LegendImg">
+						<div style="background-color: rgba(205,149,3, 0.7); margin: 3px; width:30px; height:30px; border: 0.8px solid white; ">
+						</div>
+					</td>
+					<td class="LegendTxt">Regiões em estudo de Conceição do Mato Dentro</td>
+				</tr>
+				<tr>
+					<td class="LegendImg">
+						<div style="background-color: rgba(205,30,3, 0.7); margin: 3px; width:30px; height:30px; border: 0.8px solid white; ">
+						</div>
+					</td>
+					<td class="LegendTxt">Regiões em estudo de Dom Joaquim</td>
+				</tr>
+				<tr>
+					<td class="LegendImg">
+						<div style="text-align:center; margin: 3px; width:25px; height:25px; border: 2px solid rgba(5, 142, 142,0.8); ">
+						</div>
+					</td>
+					<td class="LegendTxt">Limite dos 3 municípios</td>
+				</tr>
+				<tr>
+					<td class="LegendImg">
+						<img src="Icons_Images/green.png" alt="Cidades" height="29" width="18">
+					</td>
+					<td class="LegendTxt">Sede dos municípios mapeados</td>
+				</tr>
+				<tr>
+					<td class="LegendImg">
+						<img src="Icons_Images/red.png" alt="Mina"  height="29" width="18">
+					</td>
+					<td class="LegendTxt">Mina da Anglo American</td>
+				</tr>
+			</table>
+		</div>
+				
+		<div id="Ajuda-overlay-back">
+		</div> 
+		
+		<div id="AjudaBox">
+			<span id='close' onclick='CloseDiv(this, fadeOutID="Ajuda-overlay-back")'>x</span>
+			<p class="DivTitle">Ajuda</p>
+			<hr>
+			<div id="AjudaBoxChild">
+				<ul class = "AjudaList">
+					<h1>
+							Vídeos para facilitar o uso do mapa.
+					</h1>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							Vídeo 1: Visão Geral do mapa.
+						</li>
+					</h2>
+					<div class="AjudaImgVideo">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/Gxe-sU2E8dY" frameborder="0" allowfullscreen></iframe>
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							Vídeo 2: Utilizando o filtro.
+						</li>
+					</h2>
+					
+					<div class="AjudaImgVideo">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/aDIUfS-r2vc" frameborder="0" allowfullscreen></iframe>
+					</div>
+					
+					<br>
+					<br>
+					<h1>
+						Detalhamento das funções
+					</h1>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ModosVisu.png" alt="Modos de Visualização" style="width:60px;height:27px;">
+							Modos de visualização:
+						</li>
+					</h2>
+					<h3>
+						Existem 4 modos de visualizar o mapa: Satélite com ou sem marcadores, e a versão mapa com a função de habilitar também o relevo da região.<br>
+						Estes modos podem ser alterados acessando a barra localizada do lado superior esquerdo do mapa.<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_ModosVisualizar.png" alt="Modos de Visualização" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgFiltro.png" alt="Modos de Visualização" style="width:30px;height:30px;">
+							Filtro:
+						</li>
+					</h2>
+					<h3>
+						Para filtrar as regiões de acordo com os atributos levantados pelo Núcleo Travessia, 
+						clique no segundo botão (de cima para baixo) na barra de ferramentas
+						localizada no lado superior direito do mapa. <br>
+						<u>
+						Obs: É importante ressaltar que o filtro só é aplicado para as regiões do mapa (polígonos), ou seja, não filtra os marcadores 
+						(Sedes municipais e Mina da Anglo American).<br>
+						</u>
+						
+						
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Filtro.png" alt="Filtro" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgLocalizar.png" alt="Localizador" style="width:30px;height:30px;">
+							Localizador:
+						</li>
+					</h2>
+					<h3>
+						Para encontrar qualquer região (dentro do levantamento feito pelo Núcleo Travessia) 
+						basta utilizar o localizador. Este é o terceiro botão (de baixo para cima) da barra ferramentas  
+						(canto superior direito do mapa).<br>
+						Se a região for fora da área de estudo, apenas desmarque a caixa de seleção <i>"Comunidades em estudo"</i> e digite o local desejado.<br>
+						Opções de entrada: Nomes de cidades, estados, países, pontos turísticos, coordenadas geográficas, etc...<br>
+						
+				
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Localizador.png" alt="Localizador" style="width:60%;height:auto;">
+					</div>
+					<hr>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgLegenda.png" alt="Legenda" style="width:30px;height:30px;">
+							Legenda:
+						</li>
+					</h2>
+					<h3>
+							A legenda é o quarto botão (de cima para baixo) da barra de ferramentas (canto superior direito do mapa). <br>
+							Ela descreve as informações de cada componente presente no mapa.<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Legenda.png" alt="Legenda" style="width:60%;height:auto;">
+					</div>
+					<h2>
+						<li class = "AjudaList">
+							<img src="Icons_Images/ImgTools.png" alt="Distância" style="width:30px;height:30px;">
+							Calculadora de Medidas:
+						</li>
+					</h2>
+					<h3>
+							Para calcular distâncias no mapa clique no quinto botão (de cima para baixo) da barra de ferramentas (canto superior direito do mapa).<br>
+							Para começar, basta clicar no botão verde, que dará início ao modo de Calcular Medidas.<br>
+					</h3>
+					<h3>
+							Pode-se calcular Áreas ou Distâncias, apenas selecionando a opção desejada.<br>
+							Pode-se também, selecionar qual o tipo de unidade que deseja calcular:
+								<li style= "margin-left: 30px; list-style-type:circle;">
+									Metros e Quilômetros para distâncias;
+								</li>
+								<li style= "margin-left: 30px; list-style-type:circle;">
+									Metros quadrados, Quilômetros quadrados e Hectares para áreas.
+								</li>
+
+						<br>
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_Opcoes.png" alt="Opções" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							Clicando no mapa, um traçado começa a ser criado. <br>
+							Os círculos brancos criados no traçado, são denominados vértices que podem ser editados a qualquer momento dentro do modo de edição.<br>
+							
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_EditInic.png" alt="Inicio Edição" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							Ao editar um vértice a calculadora automaticamente atualiza a medida do traçado.<br>
+							Além disso, uma seta aparece no vértice para caso queira voltar ao ponto que este estava anteriormente.  <br>
+							
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_EditFim.png" alt="Fim Edição" style="width:60%;height:auto;">
+					</div>
+					<h3>
+							A seguir um exemplo do cálculo de Área para a sede da Anglo American.<br>
+			
+					</h3>
+					<div class="AjudaImgVideo">
+						<img src="Icons_Images/Ajuda_CalcTamMina.png" alt="Tamanho da Sede" style="width:60%;height:auto;">
+					</div>
+					<br>
+						Obs: Para clicar em alguma região ou marcador e aparecer as informações sobre esta, a opção de calcular medidas deve estar desativada (botão aparece em verde).
+					<hr>
+
+				
+				</ul>
+			</div>
+			
+		</div>
+		
+		<div id="FiltroBox" >
+			<span id='close' onclick='CloseDiv(this)'>x</span>
+			<p class="DivTitle">Pesquisa</p>
+			<div class='FiltroContainer'>
+				<div id="FiltroFirstDIV">
+					<button type="button" id="ButtonFiltro" style="width:120px;height:45px;font-size: 15px;">Filtrar Elementos</button>
+				</div>
+				<div id="FiltroSecondDIV">
+					<button type="button" id="ButtonLimparFiltro" style="width:60px;height:40px;font-size: 10px;" onclick="CleanCheckBoxesFiltro()">Limpar Filtro</button>
+				</div>
+				<div id="FiltroThirdDIV">
+					<label>
+						<button type="button" id="CheckboxMaxMin" style="width:60px;height:40px;font-size: 10px;" value='0' >Abrir Tópicos</button>
+					</label>				
+				</div>
+				<div class="clear">
+				</div>
+			</div>
+
+			<br>
+			<div>
+				<span id="FiltroComment">Total de Regiões mapeadas: 19</span>
+			</div>
+			<hr>
+			
+			<div id="FilterDiv">
+				<ul class="FiltroCategory">
+					<li class="FiltroCategory" name="Ident" >Identificação
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Ident")'><span id='span_classe_geral-Ident'>+</span></a>]</font> 
+					 </li>
+					<div class="classeGeral" id='div_classe_geral-Ident'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_BolsaFamilia' > Bolsa Família
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_Aposentadoria'> Aposentadoria
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_EmpregoAssa'> Emprego Assalariado
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_ServicoTemp'> Serviço Temporário
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_MDOFamilar'> Mão de Obra Familiar
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Id_Multirao'> Mutirão
+						</label>
+						<br>
+					</div>
+					<br>
+					
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Cultiv" >Cultivos
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Cultiv")'><span id='span_classe_geral-Cultiv'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Cultiv'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Ct_Lav' value=''> Lavouras
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Ct_Lav")'><span id='span_classe_especifica-Ct_Lav'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Ct_Lav'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_Milho' > Milho<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_Cana' > Cana<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_Feijao' > Feijão<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_Mandioca' > Mandioca<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_Cafe' > Café<br>
+								</label>
+								
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Lav'  value='Ct_Lav_VariaFeij' > Possui variedade de feijão<br>
+								</label>
+								
+							</div>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ct_Horta'> Horta
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ct_Pomar'> Pomar
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ct_GuardiaoSemente'> Guardião de Sementes
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Ct_Ins' value=''> Insumos
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Ct_Ins")'><span id='span_classe_especifica-Ct_Ins'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Ct_Ins'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Ins'  value='Ct_Ins_AduboCompra' > Compra Adubo<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Ins'  value='Ct_Ins_SementeCompra' > Compra Semente<br>
+								</label>
+								
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Ins'  value='Ct_Ins_Veneno' > Usa Veneno<br>
+								</label>
+								
+							</div>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Ct_Plant' value=''> Plantio
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Ct_Plant")'><span id='span_classe_especifica-Ct_Plant'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Ct_Plant'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Plant'  value='Ct_Plant_SementeProp' > Utiliza Semente Própria<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Ct_Plant'  value='Ct_Plant_Esterco' > Utiliza Esterco<br>
+								</label>
+							</div>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ct_Comercializa'> Comercializa os produtos
+						</label>
+						<br>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="ProdAni">Produção Animal 
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("ProdAni")'><span id='span_classe_geral-ProdAni'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-ProdAni'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='PA_Cr' value=''> Criações
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("PA_Cr")'><span id='span_classe_especifica-PA_Cr'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-PA_Cr'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='PA_Cr'  value='PA_Cr_Galinha' > Galinha<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='PA_Cr'  value='PA_Cr_Porco' > Porco<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='PA_Cr'  value='PA_Cr_Gado' > Gado<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='PA_Cr'  value='PA_Cr_Abelha' > Abelha<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='PA_Cr'  value='PA_Cr_Peixe' > Peixe<br>
+								</label>
+							</div>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='PA_Comercializa'> Comercializa os produtos
+						</label>
+						<br>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Agua" >Água 
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Agua")'><span id='span_classe_geral-Agua'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Agua'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ag_PossuiProb'> Possui Problemas com Água
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Ag_ProtegeNasc'> Nascentes Protegidas
+						</label>
+						<br>
+					</div>
+					
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Minera" >Mineração
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Minera")'><span id='span_classe_geral-Minera'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Minera'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Mi_Prob' value=''> Possui Problemas Relacionados à Mineração
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Mi_Prob")'><span id='span_classe_especifica-Mi_Prob'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Mi_Prob'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Agua' > Água<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Violencia' > Violência<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_EsvCampo' > Esvaziamento do Campo<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Fuligem' > Fuligem<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Barulho' > Barulho<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Prostituicao' > Prostituição<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Mi_Prob'  value='Mi_Prob_Outros' > Outros<br>
+								</label>
+							</div>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Mi_AngloVisita'> Recebe Visitas da Anglo American
+						</label>
+						<br>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Benefic" >Beneficiamento
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Benefic")'><span id='span_classe_geral-Benefic'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Benefic'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='Benef_AgroInd'> Agro-Indústria
+						</label>
+						<br>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="MercInst" >Mercado Institucional
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("MercInst")'><span id='span_classe_geral-MercInst'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-MercInst'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='MI_CAP'> DAP
+						</label>
+						<br>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='MI_PNAE'> PNAE
+						</label>
+						<br>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Org">Organização 
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Org")'><span id='span_classe_geral-Org'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Org'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Or_Tip' value=''> Tipos
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Or_Tip")'><span id='span_classe_especifica-Or_Tip'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Or_Tip'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Or_Tip'  value='Or_Tip_Associacao' > Associação<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Or_Tip'  value='Or_Tip_FiliadoSind' > Filiado a Sindicato<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Or_Tip'  value='Or_Tip_CMDRS' > Desenvolvimento Rural Sustentável (CMDRS)<br>
+								</label>
+							</div>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="AssisTec">Assistência Técnica 
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("AssisTec")'><span id='span_classe_geral-AssisTec'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-AssisTec'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='' value='AT_OrienTec'> Possui.
+						</label>
+					</div>
+					<br>
+					<!---  *********************************************************************** --->
+					
+					<li class="FiltroCategory" name="Muni">Municípios 
+						<font style='font-size: 13px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassGeral("Muni")'><span id='span_classe_geral-Muni'>+</span></a>]</font> 
+					</li>
+					<div class="classeGeral" id='div_classe_geral-Muni'>
+						<label class="checkbox-inline">
+							<input type='checkbox' class='psqGeral' name='Sigla_Muni' value=''> Detalhado...
+						</label>
+						<font style='font-size: 11px'>[<a style='text-decoration: none; cursor:pointer;'  onClick='toggleClassEspecifica("Sigla_Muni")'><span id='span_classe_especifica-Sigla_Muni'>+</span></a>]</font> 
+							<div class='classeEspecifica' id='div_classe_especifica-Sigla_Muni'>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Sigla_Muni'  value='CMD' > Conceição do Mato Dentro<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Sigla_Muni'  value='AM' > Alvorada de Minas<br>
+								</label>
+								<label class="checkbox-inline">
+									<input type='checkbox' class='psqEspecifica' name='Sigla_Muni'  value='DJ' > Dom Joaquim<br>
+								</label>
+							</div>
+					</div>
+					<br>
+					<br>
+					<br>
+					
+					<!---  *********************************************************************** --->
+					
+				</ul>
+			</div><!--- End FilterDiv --->
+			<div class="fadeout"></div><!--- Create a fade effect in the botton of a DIV--->
+		</div><!--- End FiltroElem --->
+		
+		<!---  Add DIV Localizador --->
+		<div id="Container_Center_Top">
+			<div id="LocalizadorBox" >
+				<span id='close' onclick='CloseDiv(this)'>x</span>
+				<p class="DivTitle">Procure um local</p>
+				<input id="address" type="textbox"  style="display:none; font-size: 12px; opacity: 0.9; width: 85%"  placeholder="Digite um local, coordenadas, etc">
+				<select id="ComunidadesSelect" ><br>
+					<option value="">-- Escolha uma Comunidade --</option>
+				</select>
+				<input id="submit-geocode" style= "font-size: 12px; width: 30px;  height: 20px; cursor:pointer;" type="button" value="Ir"><br>
+				<label>
+					<input type="checkbox" id="check_ComunidadesEstudo" onchange='ToggleOption(this)' checked>Comunidades em estudo
+				</label>
+			</div>
+			
+		</div>
+<script>
+$( "#Calculadora_Radio" ).on( "change", ".radio_Calc ", function() {
+	Clear_CalcDist_Path();
+	
+	var select = document.getElementById("UnitConversion");
+	
+	//window.alert( length );
+
+
+	select.options.length = 0;
+	
+	if ( $(this).attr("value") == "dist" ) { //User checked "Distance"
+		UnitConversion = document.createElement("option");
+		//Adding Meters
+		UnitConversion.textContent = "m";
+		UnitConversion.value = 1;
+		select.appendChild(UnitConversion);
+		
+		var UnitConversion = document.createElement("option");
+		//Adding Km
+		UnitConversion.textContent = "Km";
+		UnitConversion.value = 1000;
+		select.appendChild(UnitConversion);
+	}
+	else{ //User checked "Area"
+		UnitConversion = document.createElement("option");
+		//Adding Meters2
+		UnitConversion.textContent = "m2";
+		UnitConversion.value = 1;
+		select.appendChild(UnitConversion);
+		
+		var UnitConversion = document.createElement("option");
+		//Adding Km2
+		UnitConversion.textContent = "Km2";
+		UnitConversion.value = 1000000;
+		select.appendChild(UnitConversion);
+		
+		
+		var UnitConversion = document.createElement("option");
+		//Adding Hectare
+		UnitConversion.textContent = "Hect";
+		UnitConversion.value = 10000;
+		select.appendChild(UnitConversion);
+		
+	}
+	
+});
+
+//Stores the last unit used before the user changes it.
+var UnitConversionLast;
+//change the value of the distance to the desired unit.
+$( "#UnitConversion" ).on( "change", function() {
+	var Distance;
+	var UnitConversion;
+	var FinalValue;
+	
+	//Always return to meters before convert to another unit.
+	//convert to meters
+	if ( $('#Distance').val() ){
+		Distance = (parseFloat($('#Distance').val()))*UnitConversionLast;
+	
+		//get the unit conversion to divide the number
+		UnitConversion = $(this).prop("value");
+		
+		//divide and convert to string with 3 decimal places
+		FinalValue = ((Distance/UnitConversion).toFixed(3)).toString();
+		
+		//change the last unit conversion value
+		UnitConversionLast = $(this).prop("value");
+		
+		//Debug
+		//window.alert(Distance + " -- " + UnitConversion + " -- " + FinalValue + " -- " + UnitConversionLast);
+		
+		//display it
+		$("#Distance").val(FinalValue);
+		
+	}else{
+		$("#Distance").val("");
+	
+	}
+	
+});
+
+
+WhichBrowser();
+function WhichBrowser(){
+	var InfoPopUp = true;
+	var SpecialDIV = true;
+	var UsersBrowser = "IE";
+	
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+    if (msie > 0) // If Internet Explorer, return version number
+    {
+		UsersBrowser = "Internet Explorer";
+		//InfoPopUp = false;
+		//SpecialDIV = false;
+    }
+
+	//Chrome
+	if((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) && (navigator.userAgent.toLowerCase().indexOf('safari') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "chrome";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	//Firefox
+	if((navigator.userAgent.toLowerCase().indexOf('firefox') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "firefox";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	//Safari
+	if((navigator.userAgent.toLowerCase().indexOf('safari') > -1) && !(navigator.userAgent.toLowerCase().indexOf('chrome') > -1) && (navigator.appName == "Netscape")){
+		UsersBrowser =  "Safari";
+		//InfoPopUp = false;
+		SpecialDIV = false;
+	}
+
+	//Opera
+	if(navigator.appName == "Opera"){
+		UsersBrowser =  "Opera";
+		InfoPopUp = false;
+		SpecialDIV = false;
+	}
+	
+
+
+	if ( InfoPopUp )
+	{
+		var AlertMessage = "Este site ficará melhor visualizado utilizando o navegador Google Chrome."+
+		"Faça o download do Chrome utilizando o link abaixo:";
+		prompt(AlertMessage, "https://www.google.com/chrome/browser/desktop/index.html")
+		
+	}
+	
+	if ( SpecialDIV ){
+	
+		$("#MSIE").css("display", "block");
+
+	}
+	
+}
+
+
+var mouseX;
+var mouseY;
+//Creates a invisible DIV for the Regions hover
+$(document).mousemove( function(e) {
+   mouseX = e.pageX; 
+   mouseY = e.pageY;
+}); 
+
+
+
+$( "#Calc_Dist_DIV" ).on( "click", function() {
+	console.log("Clicked");
+	
+	if (typeof $(this).prop("value")  == "undefined"){
+		$(this).prop('value', '0'); 
+	}
+	
+	
+	if ( $(this).prop("value") == '0' ) { // Create path
+		document.getElementById('Distance').value = 0;
+		$("#ToolBoxButton").css({'background-color' : 'red'});
+		
+		$("#ToolBoxButton").css({'background-color' : 'red'});
+		$("#ToolBoxButton").css({'background' : '-webkit-linear-gradient(#F90600, #FF4C47)'});
+		$("#ToolBoxButton").css({'background' : 'linear-gradient(#F90600, #FF4C47)'});
+		$("#ToolBoxButton").css({'box-shadow' : '0 1px 0 #6F0B00, 0 5px 0 #8C1003, 0 6px 6px rgba(113, 13, 2,0.6)'});
+		
+	
+		$( "#ToolBox_Note" ).text("Clique no Mapa para criar o traçado.");
+		$( "#ToolBox_Comment" ).text("Para cancelar o traçado, clique com o botão direito ou clique no botão acima.");
+		Line_Distance.setMap(map);
+		Area_Distance.setMap(map);
+		
+		//Set the Unit when the editing started.
+		UnitConversionLast = $( "#UnitConversion" ).prop("value");
+		
+		$(this).prop('value', '1'); 
+		
+	} else { // Erase path
+		
+		Clear_CalcDist_Path();
+	}
+
+});
+
+function Clear_CalcDist_Path() {
+	$("#Calc_Dist_DIV").prop('value', '0');
+	$("#ToolBoxButton").css({'background-color' : 'green'});
+	$("#ToolBoxButton").css({'background' : '-webkit-linear-gradient(#2FBB11, #56D33C)'});
+	$("#ToolBoxButton").css({'background' : 'linear-gradient(#2FBB11, #56D33C)'});
+	$("#ToolBoxButton").css({'box-shadow' : '0 1px 0 #20780D, 0 5px 0 #136B00, 0 6px 6px rgba(16, 93, 0,0.6)'});
+
+	if ( typeof pathLine  != "undefined"){
+		pathLine.clear();
+	}
+	
+	Line_Distance.setMap(null);
+	Area_Distance.setMap(null);
+	document.getElementById('Distance').value = "";
+	
+	$( "#ToolBox_Note" ).text("Para usar essa ferramenta:");
+	$( "#ToolBox_Comment" ).text("Clique no botão VERDE para começar a desenhar o traçado.");
+		
+}
+
+
+Load_Comunidades_KML();
+function Load_Comunidades_KML() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() 
+	{
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			GetXML_Select(xmlhttp);
+		}
+	};
+	xmlhttp.open("GET", "https://dl.dropboxusercontent.com/u/39041929/site/MapaTravessia/Files_Download/Comunidades_AOI_final.kml", true);
+	xmlhttp.send();
+}
+
+	
+				
+//Process the XML File
+function GetXML_Select(xml) {
+	var i;
+	var xmlDoc = xml.responseXML;
+	var x = xmlDoc.getElementsByTagName("Placemark");
+	var DropDownText = [];
+	var DropDownValue = [];
+
+	for (i = 0; i <x.length; i++) {
+		DropDownText.push( x[i].getElementsByTagName("SimpleData")[1].childNodes[0].nodeValue ) // these are where the values what I want are.
+		DropDownValue.push( x[i].getElementsByTagName("coordinates")[0].childNodes[0].nodeValue ) // these are where the values what I want are.
+	}
+
+	var DD_select = document.getElementById("ComunidadesSelect");
+	var DDText = DropDownText;
+	var DDvalue = DropDownValue; // It returns Long,Lat and I want Lat, Long. I'll split it below...
+	for(var i = 0; i < DDText.length; i++) {
+		var Pnt_Coordinate = 	DDvalue[i].split(',');
+		var PntLong = Pnt_Coordinate[0];
+		var PntLat = Pnt_Coordinate[1];
+		
+		var DD_Element = document.createElement("option");
+		//Create Drop Down Elements
+		DD_Element.textContent = DDText[i];
+		DD_Element.value = PntLat +" , "+ PntLong
+		DD_select.appendChild(DD_Element);
+	}
+	
+	sortDropDownListByText("ComunidadesSelect");
+
+}
+
+//Function to Sort by text ignoring the first option
+function sortDropDownListByText(selectId) {
+    var foption = $('#'+ selectId + ' option:first');
+    var soptions = $('#'+ selectId + ' option:not(:first)').sort(function(a, b) {
+		//sort ignoring the Accents
+		return (a.text).localeCompare(b.text);
+    });
+	//Select the first option as a default 
+    $('#' + selectId).html(soptions).prepend(foption);              
+};
+
+//drags the boxes aroung
+$(function() {
+	$( "#LegendBox" ).draggable();
+	$( "#ToolBox" ).draggable();
+});
+
+//trigger enter button pressed
+$('#address').keypress(function(e){
+  if(e.keyCode==13)
+	$('#submit-geocode').click();
+});
+
+$('#FilterDiv').keypress(function(e){
+  if(e.keyCode==13)
+	$('#ButtonFiltro').click();
+});
+
+//We use .on to tackle with the dynamic nature of the HTML
+$( "#CheckboxMaxMin" ).on( "click", function() {
+	if ( $(this).prop("value") == '0' ) { // Maximize all
+		$('.FiltroCategory').each(function () {
+			var CategoryCod = $(this).attr("name")
+			$( "#div_classe_geral-"+CategoryCod ).show( );
+			$( "#span_classe_geral-"+CategoryCod ).text("–");
+		});
+		
+		$(this).html('Fechar Tópicos');
+		$(this).prop('value', '1'); 
+		
+	} else { //Minimize all
+		$('.FiltroCategory').each(function () {
+			var CategoryCod = $(this).attr("name")
+			$( "#div_classe_geral-"+CategoryCod ).hide( );
+			$( "#span_classe_geral-"+CategoryCod ).text("+");
+		});
+		
+		$(this).html('Abrir Tópicos'); 
+		$(this).prop('value', '0');
+	}
+});
+
+//We use .on to tackle with the dynamic nature of the HTML
+$( "#FilterDiv" ).on( "change", ".checkbox-inline > input[type=checkbox]", function() {
+	if ($(this).hasClass("psqGeral")) { //First Layer Checkbox Clicked checkbox tick
+		if( $(this).attr("name") ){
+			if ($(this).prop("checked")) { //User checked any
+				$(".checkbox-inline > input[type=checkbox][name=" + $(this).attr("name") + "]").prop("checked", true)
+			}
+			else{ //User checked any
+				$(".checkbox-inline > input[type=checkbox][name=" + $(this).attr("name") + "]").prop("checked", false)
+			}
+		}
+
+	} 
+	else { //Other checkbox tick
+		$(".psqGeral[name=" + $(this).attr("name") + "]").prop("checked", true);
+	}
+	if($(this).attr("name")){ // If the value attribute is different of NULL.
+		if($(".psqEspecifica[name=" + $(this).attr("name") + "]:checked").length == 0){
+			$(".psqGeral[name=" + $(this).attr("name") + "]").prop("checked", false);
+		}
+	}
+	
+	
+});
+
+$( "#Ajuda-overlay-back " ).on( "click", function() {
+	$('#AjudaBox, #Ajuda-overlay-back ').fadeOut("fast" ); 
+});
+
+//Function when the FiltroBox Button is pressed
+function CreateQueryToFusionTable(){
+	var ColumnsSelected = [];
+	var Name_Sigla_Muni = []; //treat it in a different way.
+	var QueryCreation = "";
+	var Sigla_Muni_Query = "";
+	var CheckBoxCount_NoSiglaMuni = 0; ;//Count all checkbox that aren't sigla muni
+	
+	//ATTENTION
+	//The CheckBox that has Class psqGeral is the category and the class psqEspecifica is the Subcategory
+	//If a psqGeral has subcategory it must NOT have VALUE and it MUST Have the same name of its subcategory checkbox
+	//If a psqGeral doesn't have a subcategory it MUST have VALUE (which is the column to search) and it must NOT Have NAME
+	
+	$('input[type=checkbox].psqEspecifica:checked').each(function () {
+		if ($(this).attr("name") == "Sigla_Muni"){ // Format to Sigla Muni ->>> Sigla_muni IN ('AM', 'CMD', 'DJ')
+			Name_Sigla_Muni.push( "\'"+$(this).attr("value")+"\'" );
+		}else{
+			ColumnsSelected.push( $(this).attr("value") );
+			CheckBoxCount_NoSiglaMuni++;
+		}
+	});
+	
+	$('input[type=checkbox].psqGeral:checked').each(function () {
+	
+		if( ($(this).attr("value")) && ($(this).attr("name") == "") ){
+			ColumnsSelected.push( $(this).attr("value") );
+			CheckBoxCount_NoSiglaMuni++;
+		}
+	});
+	
+	if ( Name_Sigla_Muni.length >0 ){
+
+		QueryCreation += "Sigla_Muni " //This is the column name in the Fusion Table 
+		QueryCreation += "IN ( ";
+		QueryCreation +=  Name_Sigla_Muni.join(', ');
+		QueryCreation += " )";
+		if ( CheckBoxCount_NoSiglaMuni > 0 ){ // If there is at least one checkbox checked that isn't Sigla_Muni
+			QueryCreation += " AND ";
+		}
+	}
+	
+	
+	for (i=0; i < ColumnsSelected.length;  i++) { 
+		if (i < (ColumnsSelected.length -1)){
+			QueryCreation += ColumnsSelected[i] + " = 1 AND ";
+		}else{
+			QueryCreation += ColumnsSelected[i] + " = 1";
+		}
+	}
+	
+	//debug
+	console.log(QueryCreation);
+	
+	return QueryCreation;
+}
+
+//Uncheck all checkboxes 
+function CleanCheckBoxesFiltro() {
+	$('input[type=checkbox].psqGeral:checked').each(function () {
+		$(this).prop('checked', false); // Unchecks it
+	});
+	$('input[type=checkbox].psqEspecifica:checked').each(function () {
+		$(this).prop('checked', false); // Unchecks it
+	});
+	
+	$('#ButtonFiltro').click();
+	
+}
+
+//Toggle DIV classe Especifica Options from FiltroBox
+function toggleClassEspecifica(cod){
+	//"div_classe_especifica_"+cod
+	if ($( "#div_classe_especifica-"+cod ).css("display")=="none"){
+		$( "#div_classe_especifica-"+cod ).show( );
+		$( "#span_classe_especifica-"+cod ).text("–");
+	} else {
+	$( "#div_classe_especifica-"+cod ).hide( );
+		$( "#span_classe_especifica-"+cod ).text("+");
+	}
+}
+
+//Toggle DIV classe Geral Options from FiltroBox
+function toggleClassGeral(cod){
+	//"div_classe_geral-"+cod
+	if ($( "#div_classe_geral-"+cod ).css("display")=="none"){
+		$( "#div_classe_geral-"+cod ).show( );
+		$( "#span_classe_geral-"+cod ).text("–");
+	} else {
+	$( "#div_classe_geral-"+cod ).hide( );
+		$( "#span_classe_geral-"+cod ).text("+");
+	}
+}
+
+
+//Close Button
+function CloseDiv(element, fadeOutID = "", ToolBox = 0) {
+	$(element).closest('div').hide()
+	
+	if( fadeOutID != "" ){
+		$( "#"+ fadeOutID ).fadeOut( "fast" );
+	}
+	
+	if( ToolBox == 1){
+		Clear_CalcDist_Path();
+
+	}
+	
+	
+}
+
+
+//Toggle Option Localizador
+function ToggleOption(element) {
+	if ($('#check_ComunidadesEstudo').prop('checked'))
+	{
+		$('#address').hide();
+		$('#ComunidadesSelect').show();
+	}else{
+		$('#address').show();
+		$('#ComunidadesSelect').hide();
+	}
+}
+
+</script>
+
+		<!---  Use API to create the map --->
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?&v=3.24&key=AIzaSyBFYwb6-B6u2cs5oknTRwtfBng2kgdDMgk&libraries=drawing,geometry&language=pt-BR&region=BR&callback=initMap">
+		</script>
+		
+	</body>
+</html>

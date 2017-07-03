@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="Comunidades_AOI_final" id="Comunidades_AOI_final">
+	<SimpleField name="Id" type="int"></SimpleField>
+	<SimpleField name="NM_Comun" type="string"></SimpleField>
+	<SimpleField name="Sigla_Comu" type="string"></SimpleField>
+</Schema>
+<Folder><name>Comunidades_AOI_final</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Capitão Felizardo</SimpleData>
+		<SimpleData name="Sigla_Comu">CaFe</SimpleData>
+	</SchemaData></ExtendedData> 
+      <Point><coordinates>-43.76631,-18.64445</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Goiabeiras</SimpleData>
+		<SimpleData name="Sigla_Comu">Goia</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.723598731403,-18.6562485338915</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Costa Sena</SimpleData>
+		<SimpleData name="Sigla_Comu">CoSe</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.6627682148656,-18.6690450465492</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Tapera(Snt. Ant. Norte)</SimpleData>
+		<SimpleData name="Sigla_Comu">SADN</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5106181380882,-18.8111774789386</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Santo Antônio do Cruzeiro</SimpleData>
+		<SimpleData name="Sigla_Comu">SADC</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5649730033176,-18.7955384294833</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Córregos</SimpleData>
+		<SimpleData name="Sigla_Comu">Corr</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5011685843104,-18.8859411787851</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Povoado Parauninha</SimpleData>
+		<SimpleData name="Sigla_Comu">PoPa</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.61804,-18.95341</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Ouro Fino</SimpleData>
+		<SimpleData name="Sigla_Comu">OuFi</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5904934758607,-18.9365985798549</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Itacolomi</SimpleData>
+		<SimpleData name="Sigla_Comu">Itac</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5185156711387,-19.0009269226298</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Sapo(São S. B. Sucesso)</SimpleData>
+		<SimpleData name="Sigla_Comu">SSDB</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.4004385067499,-18.9233531531877</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Água Quente</SimpleData>
+		<SimpleData name="Sigla_Comu">AgQu</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.37162,-18.86275</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Tabuleiro</SimpleData>
+		<SimpleData name="Sigla_Comu">Tabu</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5391589414819,-19.0635326678369</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Três Barras</SimpleData>
+		<SimpleData name="Sigla_Comu">TrBa</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5090864197905,-19.0910030385769</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Cubas</SimpleData>
+		<SimpleData name="Sigla_Comu">Cuba</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5059939723562,-19.1217678619064</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Brejaúba</SimpleData>
+		<SimpleData name="Sigla_Comu">Brej</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.1468007420713,-19.2064651108731</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Nossa Senhora do Socorro</SimpleData>
+		<SimpleData name="Sigla_Comu">SeDS</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.1779461850688,-19.1569778760778</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Buraco</SimpleData>
+		<SimpleData name="Sigla_Comu">Bura</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.5116260617784,-19.1012054830092</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Cachoeira</SimpleData>
+		<SimpleData name="Sigla_Comu">Cach</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.24971,-18.79333</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Machados</SimpleData>
+		<SimpleData name="Sigla_Comu">Mach</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.2349920953906,-18.8785193861194</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Sesmaria</SimpleData>
+		<SimpleData name="Sigla_Comu">Sesm</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.2361941670435,-18.9279380502501</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Serra</SimpleData>
+		<SimpleData name="Sigla_Comu">Serr</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.2104505945137,-18.9601228222732</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">São João</SimpleData>
+		<SimpleData name="Sigla_Comu">SaJo</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.2896912628054,-19.0144956993715</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">São José da Ilha</SimpleData>
+		<SimpleData name="Sigla_Comu">SJDI</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.328148323281,-18.9399309558742</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Ribeirão Santana</SimpleData>
+		<SimpleData name="Sigla_Comu">RiSa</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.3468764771572,-18.6911065233116</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Lapinha</SimpleData>
+		<SimpleData name="Sigla_Comu">Lapi</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.3289677778592,-18.7144332432045</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Fazenda da Ponte</SimpleData>
+		<SimpleData name="Sigla_Comu">FaDP</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.32882,-18.75665</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Ribeirão de Trás</SimpleData>
+		<SimpleData name="Sigla_Comu">RiDT</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.2794858308144,-18.7671069660489</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Bom Jesus</SimpleData>
+		<SimpleData name="Sigla_Comu">BoJe</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.3889842717741,-18.7307471578793</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Descoberto</SimpleData>
+		<SimpleData name="Sigla_Comu">Desc</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.371582783134,-18.7080848602727</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#Comunidades_AOI_final">
+		<SimpleData name="Id">0</SimpleData>
+		<SimpleData name="NM_Comun">Serra dos Monteiros</SimpleData>
+		<SimpleData name="Sigla_Comu">SeDM</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-43.4512338374731,-18.7714967370835</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
